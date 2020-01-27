@@ -32,6 +32,12 @@ const userSchema = new mongoose.Schema({
   }
 });
 
+userSchema.virtual('sales', {
+  ref: 'Sale',
+  localField: '_id',
+  foreignField: 'salesperson'
+});
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
