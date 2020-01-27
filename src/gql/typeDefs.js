@@ -14,6 +14,20 @@ const typeDefs = gql`
     password: String!
   }
 
+  type Sale {
+    id: ID!
+    date: Date!
+    stockNumber: Int!
+    source: String
+    warranty: Boolean
+    maintenance: Boolean
+    customer: String!
+    vehicle: String!
+    frontGross: Int!
+    backGross: Int!
+    salesperson: User!
+  }
+
   type Mutation {
     createUser(name: String!, email: String!, password: String!): User!
   }
