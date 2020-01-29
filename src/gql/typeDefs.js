@@ -3,8 +3,13 @@ const { gql } = require('apollo-server-express');
 const resolvers = require('./resolvers');
 
 const typeDefs = gql`
+  scalar Date
+
   type Query {
     users: [User!]!
+    user(id: ID!): User!
+    sales: [Sale!]!
+    sale(id: ID!): Sale!
   }
 
   type User {
@@ -30,6 +35,18 @@ const typeDefs = gql`
 
   type Mutation {
     createUser(name: String!, email: String!, password: String!): User!
+    createSale(
+      date: String!
+      stockNumber: Int!
+      source: String
+      warranty: Boolean
+      maintenance: Boolean
+      customer: String!
+      vehicle: String!
+      frontGross: Int!
+      backGross: Int!
+      salesperson: ID!
+    ): Sale!
   }
 `;
 
