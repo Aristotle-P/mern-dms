@@ -6,10 +6,12 @@ const Sale = require('../models/sale');
 const resolvers = {
   Query: {
     users: () => User.find(),
+
     user: (_, { id }) => {
       const user = User.findOne({ _id: id });
       return user;
     },
+
     sales: () => {
       const sale = Sale.find();
       if (!sale) {
@@ -17,6 +19,7 @@ const resolvers = {
       }
       return sale;
     },
+
     sale: (_, { id }) => {
       const sale = Sale.findOne({ _id: id });
       if (!sale) {
@@ -25,12 +28,14 @@ const resolvers = {
       return sale;
     }
   },
+
   Sale: {
-    async user(parent) {
-      const sale = await User.find({ _id: parent.id });
-      return sale;
+    salesperson(sale) {
+      salesperson = User.findOne({ _id: sale.salesperson });
+      return salesperson;
     }
   },
+
   Date: new GraphQLScalarType({
     name: 'Date',
     description: 'Date custom scalar type',
@@ -47,12 +52,14 @@ const resolvers = {
       return null;
     }
   }),
+
   Mutation: {
     createUser: async (_, { name, email, password }) => {
       const user = new User({ name, email, password });
       await user.save();
       return user;
     },
+
     createSale: async (
       _,
       {
@@ -80,7 +87,6 @@ const resolvers = {
         backGross,
         salesperson
       });
-      // sale.markModified('dueDate');
       await sale.save();
       return sale;
     }
