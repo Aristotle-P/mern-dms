@@ -11,20 +11,6 @@ const schema = createApolloSchema();
 
 const app = express();
 
-app.get('/sales/:id', (req, res) => {
-  try {
-    const sale = sale.findOne({ id: req.params.id });
-
-    if (!sale) {
-      return res.status(404).send();
-    }
-    console.log(sale);
-    res.send(sale);
-  } catch (e) {
-    res.status(500).send(e);
-  }
-});
-
 app.post(
   '/graphql',
   bodyParser.json(),

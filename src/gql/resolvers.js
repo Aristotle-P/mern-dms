@@ -28,7 +28,7 @@ const resolvers = {
       return sale;
     }
   },
-
+  // triggers when salesperson is queried from the above sale query
   Sale: {
     salesperson(sale) {
       salesperson = User.findOne({ _id: sale.salesperson });
