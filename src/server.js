@@ -1,6 +1,7 @@
 require('dotenv').config();
 require('./db/mongoose');
 const express = require('express');
+const axios = require('axios');
 const { createGraphqlMiddleware } = require('express-gql');
 const bodyParser = require('body-parser');
 const { createApolloSchema } = require('./gql/typeDefs');

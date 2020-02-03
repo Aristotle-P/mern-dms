@@ -7,8 +7,8 @@ const resolvers = {
   Query: {
     users: () => User.find(),
 
-    user: (_, { id }) => {
-      const user = User.findOne({ _id: id });
+    user: (_, { name, password }) => {
+      const user = User.findOne({ name: name, password: password });
       return user;
     },
 
