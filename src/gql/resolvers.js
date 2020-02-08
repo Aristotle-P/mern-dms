@@ -1,5 +1,6 @@
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const Sale = require('../models/sale');
 
@@ -7,8 +8,8 @@ const resolvers = {
   Query: {
     users: () => User.find(),
 
-    user: (_, { name, password }) => {
-      const user = User.findOne({ name: name, password: password });
+    user: (_, { name }) => {
+      const user = User.findOne({ name: name });
       return user;
     },
 
@@ -54,9 +55,24 @@ const resolvers = {
   }),
 
   Mutation: {
-    createUser: async (_, { name, email, password }) => {
-      const user = new User({ name, email, password });
+    register: async (_, { name, email, password }) => {
+      const foundUser = await User.findOne({ email });
+      if (foundUser) throw new Error('Email already in use');
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const user = new User({ name, email, password: hashedPassword });
       await user.save();
+      return user;
+    },
+
+    login: async (_, { email, password }) => {
+      const user = await User.findOne({ email });
+      if (!user) {
+        throw new Error('This email does not have a user associated with it');
+      }
+
+      const valid = await bcrypt.compare(password, user.password);
+      if (!valid) throw new Error('Password incorrect');
       return user;
     },
 
