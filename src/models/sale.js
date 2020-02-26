@@ -15,8 +15,9 @@ const saleSchema = new mongoose.Schema({
   warranty: {
     type: Boolean
   },
-  // Need aditional info to know what type this should be
-  // finance: {}
+  finance: {
+    type: Boolean
+  },
   maintenance: {
     type: Boolean
   },
@@ -31,12 +32,10 @@ const saleSchema = new mongoose.Schema({
     trim: true
   },
   frontGross: {
-    type: Number,
-    required: true
+    type: Number
   },
   backGross: {
-    type: Number,
-    required: true
+    type: Number
   },
   salesperson: {
     type: mongoose.Schema.Types.ObjectId,

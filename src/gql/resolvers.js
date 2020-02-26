@@ -1,6 +1,8 @@
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
 const bcrypt = require('bcryptjs');
+const { sign } = require('jsonwebtoken');
+
 const User = require('../models/user');
 const Sale = require('../models/sale');
 
@@ -27,6 +29,14 @@ const resolvers = {
         throw Error('No sale found');
       }
       return sale;
+    },
+
+    me: (_, __, { req }) => {
+      if (!req.userId) {
+        return null;
+      }
+
+      return User.findOne({ _id: req.userId });
     }
   },
   // triggers when salesperson is queried from the above sale query
@@ -65,7 +75,7 @@ const resolvers = {
       return user;
     },
 
-    login: async (_, { email, password }) => {
+    login: async (_, { email, password }, { res }) => {
       const user = await User.findOne({ email });
       if (!user) {
         throw new Error('This email does not have a user associated with it');
@@ -73,6 +83,28 @@ const resolvers = {
 
       const valid = await bcrypt.compare(password, user.password);
       if (!valid) throw new Error('Password incorrect');
+
+      const accessToken = sign(
+        { userId: user.id },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+          expiresIn: '15min'
+        }
+      );
+
+      const refreshToken = sign(
+        { userId: user.id },
+        process.env.REFRESH_TOKEN_SECRET,
+        {
+          expiresIn: '7d'
+        }
+      );
+
+      res.cookie('access-token', accessToken, { maxAge: 15 * 60 * 1000 });
+      res.cookie('refresh-token', refreshToken, {
+        maxAge: 7 * 24 * 60 * 60 * 1000
+      });
+
       return user;
     },
 

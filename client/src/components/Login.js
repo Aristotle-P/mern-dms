@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [input, setInput] = useState({ username: '', password: '' });
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -17,8 +16,8 @@ const Login = () => {
             }
           }`,
         variables: {
-          name: username,
-          password: password
+          name: input.username,
+          password: input.password
         }
       });
       const { name, email } = res.data.data.users[0];
@@ -27,6 +26,7 @@ const Login = () => {
       console.log(err);
     }
   };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -34,13 +34,13 @@ const Login = () => {
           type="text"
           name="username"
           id="username"
-          onChange={e => setUsername({ username: e.target.value })}
+          onChange={e => setInput({ ...input, username: e.target.value })}
         />
         <input
           type="password"
           name="password"
           id="password"
-          onChange={e => setPassword({ password: e.target.value })}
+          onChange={e => setInput({ ...input, password: e.target.value })}
         />
         <button type="submit">Log In</button>
       </form>

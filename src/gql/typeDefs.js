@@ -11,6 +11,7 @@ const typeDefs = gql`
     user(name: String!, password: String!): User!
     sales: [Sale!]!
     sale(id: ID!): Sale!
+    me: User
   }
 
   type User {
