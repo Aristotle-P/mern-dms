@@ -10,19 +10,51 @@ const expressPlayground = require('graphql-playground-middleware-express')
 const cookieParser = require('cookie-parser');
 const { verify } = require('jsonwebtoken');
 
+const { createTokens } = require('./utils/auth');
+const User = require('./models/user');
+
 const schema = createApolloSchema();
 
 const app = express();
 
 app.use(cookieParser());
 
-app.use((req, _, next) => {
+app.use(async (req, res, next) => {
   const accessToken = req.cookies['access-token'];
+  const refreshToken = req.cookies['refresh-token'];
+
+  if (!accessToken && !refreshToken) {
+    return next();
+  }
 
   try {
     const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
     req.userId = data.userId;
     return next();
+  } catch (error) {
+    console.log(error);
+  }
+
+  if (!refreshToken) {
+    return next();
+  }
+
+  try {
+    const data = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const user = await User.findOne({ _id: data.userId });
+
+    if (!user || user.count !== data.count) {
+      return next();
+    }
+
+    const tokens = createTokens(user);
+
+    res.cookie('access-token', tokens.accessToken, { maxAge: 15 * 60 * 1000 });
+    res.cookie('refresh-token', tokens.refreshToken, {
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    req.userId = user.id;
   } catch (error) {
     console.log(error);
   }

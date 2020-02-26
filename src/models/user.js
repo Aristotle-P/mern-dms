@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema({
         throw new Error('Password cannot include the word "password"');
       }
     }
+  },
+  count: {
+    type: Number,
+    default: 0
   }
 });
 

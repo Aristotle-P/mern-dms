@@ -5,6 +5,7 @@ const { sign } = require('jsonwebtoken');
 
 const User = require('../models/user');
 const Sale = require('../models/sale');
+const { createTokens } = require('../utils/auth');
 
 const resolvers = {
   Query: {
@@ -84,21 +85,7 @@ const resolvers = {
       const valid = await bcrypt.compare(password, user.password);
       if (!valid) throw new Error('Password incorrect');
 
-      const accessToken = sign(
-        { userId: user.id },
-        process.env.ACCESS_TOKEN_SECRET,
-        {
-          expiresIn: '15min'
-        }
-      );
-
-      const refreshToken = sign(
-        { userId: user.id },
-        process.env.REFRESH_TOKEN_SECRET,
-        {
-          expiresIn: '7d'
-        }
-      );
+      const { accessToken, refreshToken } = createTokens(user);
 
       res.cookie('access-token', accessToken, { maxAge: 15 * 60 * 1000 });
       res.cookie('refresh-token', refreshToken, {
@@ -106,6 +93,18 @@ const resolvers = {
       });
 
       return user;
+    },
+
+    invalidateTokens: async (_, __, { req, res }) => {
+      if (!req.userId) {
+        return false;
+      }
+
+      await User.findOneAndUpdate({ _id: req.userId }, { $inc: { count: 1 } });
+
+      res.clearCookie('access-token');
+
+      return true;
     },
 
     createSale: async (

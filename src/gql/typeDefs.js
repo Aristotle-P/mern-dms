@@ -19,6 +19,7 @@ const typeDefs = gql`
     name: String!
     email: String!
     password: String!
+    count: Int!
   }
 
   type Sale {
@@ -50,6 +51,7 @@ const typeDefs = gql`
       backGross: Int!
       salesperson: ID!
     ): Sale!
+    invalidateTokens: Boolean!
   }
 `;
 
