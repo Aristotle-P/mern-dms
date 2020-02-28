@@ -1,29 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 
+import UserContext from './UserContext';
+
 const Login = () => {
-  const [input, setInput] = useState({ username: '', password: '' });
+  const [input, setInput] = useState({ email: '', password: '' });
+  const { user, setUser } = useContext(UserContext);
 
   const handleSubmit = async e => {
     e.preventDefault();
     try {
       const res = await axios.post('/graphql', {
-        query: `
-          {
-            user(name: $name, password: $password) {
+        query: `mutation login($email: String!, $password: String!) {
+            login(email: $email, password: $password) {
               name
-              email
+              id
             }
           }`,
         variables: {
-          name: input.username,
+          email: input.email,
           password: input.password
         }
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
-      const { name, email } = res.data.data.users[0];
-      console.log(name, email);
+      const { name, id } = res.data.data.login;
+      setUser({ name, id });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -31,10 +37,10 @@ const Login = () => {
     <div>
       <form onSubmit={handleSubmit}>
         <input
-          type="text"
-          name="username"
-          id="username"
-          onChange={e => setInput({ ...input, username: e.target.value })}
+          type="email"
+          name="email"
+          id="email"
+          onChange={e => setInput({ ...input, email: e.target.value })}
         />
         <input
           type="password"
