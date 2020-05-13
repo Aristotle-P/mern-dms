@@ -6,7 +6,6 @@ import {
   Redirect
 } from 'react-router-dom';
 
-import axios from 'axios';
 import cookie from 'js-cookie';
 
 import UserContext from './components/UserContext';
