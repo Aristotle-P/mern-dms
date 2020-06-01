@@ -21,6 +21,7 @@ const Home = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    e.target.reset();
     try {
       await axios.post(
         'http://localhost:5000/graphql',

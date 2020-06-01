@@ -30,11 +30,8 @@ app.use(cookieParser());
 app.use(async (req, res, next) => {
   const accessToken = req.cookies['access-token'];
   const refreshToken = req.cookies['refresh-token'];
-  console.log('top of auth checking!');
-  console.log(`accessToken: ${accessToken}, refreshToken: ${refreshToken}`);
 
   if (!accessToken && !refreshToken) {
-    console.log('neither token');
     return next();
   }
 

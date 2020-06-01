@@ -137,7 +137,6 @@ const resolvers = {
         salesperson,
       });
       await sale.save();
-      console.log('error is here');
       return sale;
     },
   },
