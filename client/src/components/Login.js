@@ -10,11 +10,11 @@ const Login = () => {
   const [input, setInput] = useState({ email: '', password: '' });
   const { user, setUser } = useContext(UserContext);
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        '/graphql',
+        'http://localhost:5000/graphql',
         {
           query: `mutation login($email: String!, $password: String!) {
             login(email: $email, password: $password) {
@@ -24,17 +24,22 @@ const Login = () => {
           }`,
           variables: {
             email: input.email,
-            password: input.password
-          }
+            password: input.password,
+          },
         },
         {
           headers: {
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
         }
       );
       const { name, id } = res.data.data.login;
-      setUser({ name, id, cookie: cookie.get('access-token') });
+      if (name) {
+        setUser({ name, id, cookie: cookie.get('access-token') });
+      } else {
+        console.log('why error????');
+      }
     } catch (err) {
       console.error(err);
     }
@@ -51,13 +56,13 @@ const Login = () => {
           type="email"
           name="email"
           id="email"
-          onChange={e => setInput({ ...input, email: e.target.value })}
+          onChange={(e) => setInput({ ...input, email: e.target.value })}
         />
         <input
           type="password"
           name="password"
           id="password"
-          onChange={e => setInput({ ...input, password: e.target.value })}
+          onChange={(e) => setInput({ ...input, password: e.target.value })}
         />
         <button type="submit">Log In</button>
       </form>

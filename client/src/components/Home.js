@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
+
+import UserContext from './UserContext';
 
 const Home = () => {
   const [input, setInput] = useState({
     date: null,
-    stocknumber: null,
+    stockNumber: null,
     source: '',
     warranty: null,
     finance: null,
@@ -12,32 +14,25 @@ const Home = () => {
     customer: '',
     vehicle: '',
     frontGross: null,
-    backGross: null
+    backGross: null,
   });
 
-  const handleSubmit = async e => {
+  const { user } = useContext(UserContext);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        '/graphql',
+      await axios.post(
+        'http://localhost:5000/graphql',
         {
-          query: `mutation createSale(
-            $date: String!, 
-            $stockNumber: String!, 
-            $source: String, 
-            $warranty: Boolean,
-            $finance: Boolean,
-            $maintenance: Boolean,
-            $customer: String!,
-            $vehicle: String!,
-            $frontGross: Int!,
-            $backGross: Int!,
-            $salesperson: ID!) {
-              $vehicle
-            }`,
+          query: `mutation createSale($date: String!, $stockNumber: Int!, $source: String, $warranty: Boolean, $maintenance: Boolean, $customer: String!, $vehicle: String!, $frontGross: Int!, $backGross: Int!, $salesperson: ID!) {
+            createSale(date: $date, stockNumber: $stockNumber, source: $source, warranty: $warranty, maintenance: $maintenance, customer: $customer, vehicle: $vehicle, frontGross: $frontGross, backGross: $backGross, salesperson: $salesperson) {
+              vehicle
+            }
+          }`,
           variables: {
             date: input.date,
-            stockNumber: input.stocknumber,
+            stockNumber: input.stockNumber,
             source: input.source,
             warranty: input.warranty,
             finance: input.finance,
@@ -45,14 +40,15 @@ const Home = () => {
             customer: input.customer,
             vehicle: input.vehicle,
             frontGross: input.frontGross,
-            backGross: input.backGross
-            // salesperson: user.id
-          }
+            backGross: input.backGross,
+            salesperson: user.id,
+          },
         },
         {
           headers: {
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
         }
       );
     } catch (err) {
@@ -63,73 +59,79 @@ const Home = () => {
   return (
     <div>
       <h1>You're logged in!</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           type="date"
-          onChange={e => setInput({ ...input, date: e.target.value })}
+          onChange={(e) => setInput({ ...input, date: e.target.value })}
         />
         <label htmlFor="stocknumber">Stocknumber</label>
         <input
           type="number"
           name="stocknumber"
           id="stocknumber"
-          onChange={e => setInput({ ...input, stocknumber: e.target.value })}
+          onChange={(e) =>
+            setInput({ ...input, stockNumber: parseInt(e.target.value) })
+          }
         />
         <label htmlFor="source">Source</label>
         <input
           type="text"
           name="source"
           id="source"
-          onChange={e => setInput({ ...input, source: e.target.value })}
+          onChange={(e) => setInput({ ...input, source: e.target.value })}
         />
         <label htmlFor="warranty">Warranty</label>
         <input
           type="checkbox"
           name="warranty"
           id="warranty"
-          onChange={e => setInput({ ...input, warranty: e.target.value })}
+          onChange={(e) => setInput({ ...input, warranty: true })}
         />
         <label htmlFor="finance">Finance</label>
         <input
           type="checkbox"
           name="finance"
           id="finance"
-          onChange={e => setInput({ ...input, finance: e.target.value })}
+          onChange={(e) => setInput({ ...input, finance: true })}
         />
         <label htmlFor="maintenance">Maintenance</label>
         <input
           type="checkbox"
           name="maintenance"
           id="maintenance"
-          onChange={e => setInput({ ...input, maintenance: e.target.value })}
+          onChange={(e) => setInput({ ...input, maintenance: true })}
         />
         <label htmlFor="customer">Customer</label>
         <input
           type="text"
           name="customer"
           id="customer"
-          onChange={e => setInput({ ...input, customer: e.target.value })}
+          onChange={(e) => setInput({ ...input, customer: e.target.value })}
         />
         <label htmlFor="vehicle">Vehicle</label>
         <input
           type="text"
           name="vehicle"
           id="vehicle"
-          onChange={e => setInput({ ...input, vehicle: e.target.value })}
+          onChange={(e) => setInput({ ...input, vehicle: e.target.value })}
         />
         <label htmlFor="front-gross">Front Gross</label>
         <input
           type="number"
           name="front-gross"
           id="front-gross"
-          onChange={e => setInput({ ...input, frontGross: e.target.value })}
+          onChange={(e) =>
+            setInput({ ...input, frontGross: parseInt(e.target.value) })
+          }
         />
         <label htmlFor="back-gross">Back Gross</label>
         <input
           type="number"
           name="back-gross"
           id="back-gross"
-          onChange={e => setInput({ ...input, backGross: e.target.value })}
+          onChange={(e) =>
+            setInput({ ...input, backGross: parseInt(e.target.value) })
+          }
         />
         <input type="submit" value="Create" />
       </form>

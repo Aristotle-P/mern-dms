@@ -38,14 +38,14 @@ const resolvers = {
       }
 
       return User.findOne({ _id: req.userId });
-    }
+    },
   },
   // triggers when salesperson is queried from the above sale query
   Sale: {
     salesperson(sale) {
       salesperson = User.findOne({ _id: sale.salesperson });
       return salesperson;
-    }
+    },
   },
 
   Date: new GraphQLScalarType({
@@ -62,7 +62,7 @@ const resolvers = {
         return new Date(ast.value); // ast value is always in string format
       }
       return null;
-    }
+    },
   }),
 
   Mutation: {
@@ -87,9 +87,11 @@ const resolvers = {
 
       const { accessToken, refreshToken } = createTokens(user);
 
-      res.cookie('access-token', accessToken, { maxAge: 15 * 60 * 1000 });
-      res.cookie('refresh-token', refreshToken, {
-        maxAge: 7 * 24 * 60 * 60 * 1000
+      await res.cookie('access-token', accessToken, {
+        maxAge: 15 * 60 * 1000,
+      });
+      await res.cookie('refresh-token', refreshToken, {
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
       return user;
@@ -119,7 +121,7 @@ const resolvers = {
         vehicle,
         frontGross,
         backGross,
-        salesperson
+        salesperson,
       }
     ) => {
       const sale = new Sale({
@@ -132,12 +134,13 @@ const resolvers = {
         vehicle,
         frontGross,
         backGross,
-        salesperson
+        salesperson,
       });
       await sale.save();
+      console.log('error is here');
       return sale;
-    }
-  }
+    },
+  },
 };
 
 module.exports = resolvers;

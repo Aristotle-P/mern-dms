@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
+  Redirect,
 } from 'react-router-dom';
 
 import cookie from 'js-cookie';
@@ -46,11 +46,11 @@ const App = () => {
     }
   }, [user.cookie]);
 
-  const authRoute = () => {
-    if (!user.cookie) {
-      return <Redirect to="/login" />;
-    }
-  };
+  // const authRoute = () => {
+  //   if (!user.cookie) {
+  //     return <Redirect to="/login" />;
+  //   }
+  // };
 
   return (
     <Router>
@@ -62,7 +62,7 @@ const App = () => {
               {loggedIn ? <Redirect to="/" /> : <Login />}
             </Route>
             <Route path="/">
-              {authRoute()}
+              {/* {authRoute()} */}
               <Home />
             </Route>
           </Switch>
