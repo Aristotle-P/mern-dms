@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 
 import cookie from 'js-cookie';
+import axios from 'axios';
 
 import UserContext from './components/UserContext';
 import Login from './components/Login';
@@ -20,25 +21,25 @@ const App = () => {
 
   useEffect(() => {
     if (!user.cookie) {
-      setUser({ cookie: cookie.get('refresh-token') });
+      setUser({ cookie: cookie.get('access-token') });
     }
   }, [user.cookie]);
 
-  // useEffect(() => {
-  //   const refreshToken = async () => {
-  //     if (!user.cookie) {
-  //       await axios.post('/graphql', {
-  //         query: `{
-  //           me {
-  //             name
-  //           }
-  //         }`
-  //       });
-  //       setUser({ cookie: cookie.get('access-token') });
-  //     }
-  //   };
-  //   refreshToken();
-  // }, [user.cookie]);
+  useEffect(() => {
+    if (!user.cookie) {
+      const refreshToken = async () => {
+        await axios.post('http://localhost:5000/graphql', {
+          query: `{
+              me {
+                name
+              }
+            }`,
+        });
+        setUser({ cookie: cookie.get('access-token') });
+      };
+      refreshToken();
+    }
+  }, [user.cookie]);
 
   useEffect(() => {
     if (user.cookie) {
@@ -46,11 +47,11 @@ const App = () => {
     }
   }, [user.cookie]);
 
-  // const authRoute = () => {
-  //   if (!user.cookie) {
-  //     return <Redirect to="/login" />;
-  //   }
-  // };
+  const authRoute = () => {
+    if (!user.cookie) {
+      return <Redirect to="/login" />;
+    }
+  };
 
   return (
     <Router>
@@ -62,7 +63,7 @@ const App = () => {
               {loggedIn ? <Redirect to="/" /> : <Login />}
             </Route>
             <Route path="/">
-              {/* {authRoute()} */}
+              {authRoute()}
               <Home />
             </Route>
           </Switch>
