@@ -35,11 +35,7 @@ const Login = () => {
         }
       );
       const { name, id } = res.data.data.login;
-      if (name) {
-        setUser({ name, id, cookie: cookie.get('access-token') });
-      } else {
-        console.log('why error????');
-      }
+      setUser({ name, id, cookie: cookie.get('access-token') });
     } catch (err) {
       console.error(err);
     }

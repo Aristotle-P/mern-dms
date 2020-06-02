@@ -6,9 +6,6 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-import cookie from 'js-cookie';
-import axios from 'axios';
-
 import UserContext from './components/UserContext';
 import Login from './components/Login';
 import Home from './components/Home';
@@ -16,39 +13,17 @@ import Home from './components/Home';
 import './App.css';
 
 const App = () => {
-  const [user, setUser] = useState({ name: '', id: null, cookie: null });
+  const [user, setUser] = useState({ name: '', id: null });
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
-    if (!user.cookie) {
-      setUser({ cookie: cookie.get('access-token') });
-    }
-  }, [user.cookie]);
-
-  useEffect(() => {
-    if (!user.cookie) {
-      const refreshToken = async () => {
-        await axios.post('http://localhost:5000/graphql', {
-          query: `{
-              me {
-                name
-              }
-            }`,
-        });
-        setUser({ cookie: cookie.get('access-token') });
-      };
-      refreshToken();
-    }
-  }, [user.cookie]);
-
-  useEffect(() => {
-    if (user.cookie) {
+    if (user.id) {
       setLoggedIn(true);
     }
-  }, [user.cookie]);
+  }, [user.id]);
 
   const authRoute = () => {
-    if (!user.cookie) {
+    if (!user.id) {
       return <Redirect to="/login" />;
     }
   };

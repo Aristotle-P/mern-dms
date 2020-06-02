@@ -11,7 +11,7 @@ const typeDefs = gql`
     user(name: String!, password: String!): User!
     sales: [Sale!]!
     sale(id: ID!): Sale!
-    me: User
+    me(id: ID!): User
   }
 
   type User {
@@ -58,6 +58,6 @@ const typeDefs = gql`
 module.exports.createApolloSchema = () => {
   return makeExecutableSchema({
     typeDefs,
-    resolvers
+    resolvers,
   });
 };

@@ -32,12 +32,13 @@ const resolvers = {
       return sale;
     },
 
-    me: (_, __, { req }) => {
-      if (!req.userId) {
-        return null;
+    me: (_, { id }) => {
+      const user = User.findOne({ _id: id });
+      if (!user) {
+        throw Error('You are not logged in');
       }
 
-      return User.findOne({ _id: req.userId });
+      return user;
     },
   },
   // triggers when salesperson is queried from the above sale query
@@ -108,10 +109,6 @@ const resolvers = {
 
       return true;
     },
-
-    // refreshTokens: async ({req, res}) => {
-    //   if (req.)
-    // },
 
     createSale: async (
       _,
