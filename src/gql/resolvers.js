@@ -5,7 +5,7 @@ const { sign } = require('jsonwebtoken');
 
 const User = require('../models/user');
 const Sale = require('../models/sale');
-const { createTokens } = require('../utils/auth');
+const { createAccessToken, createRefreshToken } = require('../utils/auth');
 
 const resolvers = {
   Query: {
@@ -32,11 +32,13 @@ const resolvers = {
       return sale;
     },
 
-    me: (_, { id }) => {
+    me: (_, { id }, { req }) => {
       const user = User.findOne({ _id: id });
       if (!user) {
         throw Error('You are not logged in');
       }
+
+      console.log(req.payload.id);
 
       return user;
     },
@@ -86,16 +88,18 @@ const resolvers = {
       const valid = await bcrypt.compare(password, user.password);
       if (!valid) throw new Error('Password incorrect');
 
-      const { accessToken, refreshToken } = createTokens(user);
+      // const { accessToken, refreshToken } = createTokens(user);
 
-      await res.cookie('access-token', accessToken, {
-        maxAge: 15 * 60 * 1000,
-      });
-      await res.cookie('refresh-token', refreshToken, {
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
+      // await res.cookie('access-token', accessToken, {
+      //   maxAge: 15 * 60 * 1000,
+      //   sameSite: 'Lax',
+      // });
+      // await res.cookie('refresh-token', refreshToken, {
+      //   maxAge: 7 * 24 * 60 * 60 * 1000,
+      //   sameSite: 'Lax',
+      // });
 
-      return user;
+      return { accessToken: createAccessToken(user), user };
     },
 
     invalidateTokens: async (_, __, { req, res }) => {

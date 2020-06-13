@@ -6,6 +6,9 @@ import {
   Redirect,
 } from 'react-router-dom';
 
+import axios from 'axios';
+import jwtDecode from 'jwt-decode';
+
 import UserContext from './components/UserContext';
 import Login from './components/Login';
 import Home from './components/Home';
@@ -13,17 +16,70 @@ import Home from './components/Home';
 import './App.css';
 
 const App = () => {
-  const [user, setUser] = useState({ name: '', id: null });
+  const [user, setUser] = useState({ name: '', id: null, cookie: null });
   const [loggedIn, setLoggedIn] = useState(false);
 
+  const getCookie = (title) => {
+    try {
+      const cookieValue = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith(title))
+        .split('=')[1];
+      return cookieValue;
+    } catch (err) {}
+  };
+
   useEffect(() => {
-    if (user.id) {
+    if (user.cookie) {
       setLoggedIn(true);
     }
-  }, [user.id]);
+  }, [user.cookie]);
+
+  useEffect(() => {
+    if (!user.cookie) {
+      try {
+        const cookie = getCookie('access-token');
+        if (!cookie) {
+          try {
+            const refreshCookie = getCookie('refresh-token');
+            const { userId } = jwtDecode(refreshCookie);
+            const refresh = async () => {
+              await axios.post(
+                '/graphql',
+                {
+                  query: `query me($id: ID!) {
+                    me(id: $id) {
+                      id
+                    }
+                  }`,
+                  variables: {
+                    id: userId,
+                  },
+                },
+                {
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  withCredentials: true,
+                }
+              );
+              const cookie = getCookie('access-token');
+              setUser({ cookie: cookie });
+            };
+            refresh();
+          } catch (err) {
+            console.error(err);
+          }
+        }
+        setUser({ cookie: cookie });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }, [user.cookie]);
 
   const authRoute = () => {
-    if (!user.id) {
+    if (!user.cookie) {
       return <Redirect to="/login" />;
     }
   };

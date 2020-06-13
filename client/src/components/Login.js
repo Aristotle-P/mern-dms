@@ -14,7 +14,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        'http://localhost:5000/graphql',
+        '/graphql',
         {
           query: `mutation login($email: String!, $password: String!) {
             login(email: $email, password: $password) {

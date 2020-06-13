@@ -1,25 +1,29 @@
 const { sign } = require('jsonwebtoken');
 
-const createTokens = user => {
+const createAccessToken = (user) => {
   const accessToken = sign(
-    { userId: user.id, count: user.count },
+    { id: user.id, count: user.count },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: '15min'
+      expiresIn: '15min',
     }
   );
 
+  return accessToken;
+};
+const createRefreshToken = (user) => {
   const refreshToken = sign(
-    { userId: user.id, count: user.count },
+    { id: user.id, count: user.count },
     process.env.REFRESH_TOKEN_SECRET,
     {
-      expiresIn: '7d'
+      expiresIn: '7d',
     }
   );
 
-  return { accessToken, refreshToken };
+  return refreshToken;
 };
 
 module.exports = {
-  createTokens
+  createAccessToken,
+  createRefreshToken,
 };

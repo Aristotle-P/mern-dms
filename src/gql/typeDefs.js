@@ -11,7 +11,7 @@ const typeDefs = gql`
     user(name: String!, password: String!): User!
     sales: [Sale!]!
     sale(id: ID!): Sale!
-    me(id: ID!): User
+    me(id: ID!): User!
   }
 
   type User {
@@ -36,9 +36,19 @@ const typeDefs = gql`
     salesperson: User!
   }
 
+  type LoginObject {
+    accessToken: String!
+    user: User!
+  }
+
+  type MeObject {
+    id: String!
+    user: User!
+  }
+
   type Mutation {
     register(name: String!, email: String!, password: String!): User!
-    login(email: String!, password: String!): User!
+    login(email: String!, password: String!): LoginObject!
     createSale(
       date: String!
       stockNumber: Int!

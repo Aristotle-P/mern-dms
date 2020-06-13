@@ -2,82 +2,32 @@ require('dotenv').config();
 require('./db/mongoose');
 const express = require('express');
 const { createGraphqlMiddleware } = require('express-gql');
+const { applyMiddleware } = require('graphql-middleware');
 const bodyParser = require('body-parser');
 const { createApolloSchema } = require('./gql/typeDefs');
 const expressPlayground = require('graphql-playground-middleware-express')
   .default;
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
 const { verify } = require('jsonwebtoken');
 
 const { createTokens } = require('./utils/auth');
 const User = require('./models/user');
+const middleware = require('./utils/middleware');
 
 const schema = createApolloSchema();
+const schemaWithMiddleware = applyMiddleware(schema, ...middleware);
 
 const app = express();
 
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
-
 app.use(cookieParser());
-
-app.use(async (req, res, next) => {
-  const accessToken = req.cookies['access-token'];
-  const refreshToken = req.cookies['refresh-token'];
-
-  if (!accessToken && !refreshToken) {
-    return next();
-  }
-
-  try {
-    const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
-    req.userId = data.userId;
-    return next();
-  } catch (error) {
-    console.log(error);
-  }
-
-  if (!refreshToken) {
-    return next();
-  }
-
-  try {
-    const data = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-    const user = await User.findOne({ _id: data.userId });
-
-    if (!user || user.count !== data.count) {
-      return next();
-    }
-
-    const tokens = createTokens(user);
-
-    res.cookie('access-token', tokens.accessToken, { maxAge: 15 * 60 * 1000 });
-    res.cookie('refresh-token', tokens.refreshToken, {
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
-    req.userId = user.id;
-  } catch (error) {
-    console.log(error);
-  }
-
-  console.log('bottom of auth checking');
-
-  next();
-});
 
 app.post(
   '/graphql',
   bodyParser.json(),
   createGraphqlMiddleware({
-    context: ({ req, res }) => ({ req, res }),
+    context: ({ req, res, next }) => ({ req, res, next }),
     formatError: ({ req, error }) => error,
-    schema,
+    schema: schemaWithMiddleware,
   })
 );
 

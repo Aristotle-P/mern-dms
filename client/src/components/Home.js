@@ -25,7 +25,7 @@ const Home = () => {
     e.target.reset();
     try {
       await axios.post(
-        'http://localhost:5000/graphql',
+        '/graphql',
         {
           query: `mutation createSale(
             $date: String!, 
