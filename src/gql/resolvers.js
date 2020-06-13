@@ -88,28 +88,15 @@ const resolvers = {
       const valid = await bcrypt.compare(password, user.password);
       if (!valid) throw new Error('Password incorrect');
 
-      // const { accessToken, refreshToken } = createTokens(user);
-
-      // await res.cookie('access-token', accessToken, {
-      //   maxAge: 15 * 60 * 1000,
-      //   sameSite: 'Lax',
-      // });
-      // await res.cookie('refresh-token', refreshToken, {
-      //   maxAge: 7 * 24 * 60 * 60 * 1000,
-      //   sameSite: 'Lax',
-      // });
+      res.cookie('jid', createRefreshToken(user), {
+        httpOnly: true,
+      });
 
       return { accessToken: createAccessToken(user), user };
     },
 
-    invalidateTokens: async (_, __, { req, res }) => {
-      if (!req.userId) {
-        return false;
-      }
-
-      await User.findOneAndUpdate({ _id: req.userId }, { $inc: { count: 1 } });
-
-      res.clearCookie('access-token');
+    invalidateRefreshTokens: async (_, { id }) => {
+      await User.findOneAndUpdate({ _id: id }, { $inc: { count: 1 } });
 
       return true;
     },

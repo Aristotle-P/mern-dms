@@ -41,11 +41,6 @@ const typeDefs = gql`
     user: User!
   }
 
-  type MeObject {
-    id: String!
-    user: User!
-  }
-
   type Mutation {
     register(name: String!, email: String!, password: String!): User!
     login(email: String!, password: String!): LoginObject!
@@ -61,7 +56,7 @@ const typeDefs = gql`
       backGross: Int!
       salesperson: ID!
     ): Sale!
-    invalidateTokens: Boolean!
+    invalidateRefreshTokens(id: ID!): Boolean!
   }
 `;
 

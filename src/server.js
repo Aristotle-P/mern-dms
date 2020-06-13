@@ -10,7 +10,7 @@ const expressPlayground = require('graphql-playground-middleware-express')
 const cookieParser = require('cookie-parser');
 const { verify } = require('jsonwebtoken');
 
-const { createTokens } = require('./utils/auth');
+const { createAccessToken, createRefreshToken } = require('./utils/auth');
 const User = require('./models/user');
 const middleware = require('./utils/middleware');
 
@@ -20,6 +20,36 @@ const schemaWithMiddleware = applyMiddleware(schema, ...middleware);
 const app = express();
 
 app.use(cookieParser());
+
+app.post('/refresh-token', async (req, res) => {
+  const token = req.cookies.jid;
+  if (!token) {
+    return res.send({ ok: false, accessToken: '' });
+  }
+
+  let payload;
+  try {
+    payload = verify(token, process.env.REFRESH_TOKEN_SECRET);
+  } catch (err) {
+    console.error(err);
+    return res.send({ ok: false, accessToken: '' });
+  }
+  const user = await User.findOne({ _id: payload.id });
+
+  if (!user) {
+    return res.send({ ok: false, accessToken: '' });
+  }
+
+  if (user.count !== payload.count) {
+    return res.send({ ok: false, accessToken: '' });
+  }
+
+  res.cookie('jid', createRefreshToken(user), {
+    httpOnly: true,
+  });
+
+  return res.send({ ok: true, accessToken: createAccessToken(user) });
+});
 
 app.post(
   '/graphql',
