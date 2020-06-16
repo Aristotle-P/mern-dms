@@ -18,14 +18,12 @@ const Home = () => {
     backGross: null,
   });
 
-  const { user } = useContext(UserContext);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.target.reset();
     try {
       await axios.post(
-        '/graphql',
+        'http://localhost:5000/graphql',
         {
           query: `mutation createSale(
             $date: String!, 
@@ -54,7 +52,7 @@ const Home = () => {
           }`,
           variables: {
             date: input.date,
-            stockNumber: input.stockNumber,
+            stockNumber: 192819283,
             source: input.source,
             warranty: input.warranty,
             finance: input.finance,
@@ -63,7 +61,7 @@ const Home = () => {
             vehicle: input.vehicle,
             frontGross: input.frontGross,
             backGross: input.backGross,
-            salesperson: user.id,
+            salesperson: '5e585054d0fda9164856b22f',
           },
         },
         {

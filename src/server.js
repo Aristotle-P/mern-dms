@@ -1,23 +1,27 @@
 require('dotenv').config();
 require('./db/mongoose');
 const express = require('express');
-const { createGraphqlMiddleware } = require('express-gql');
-const { applyMiddleware } = require('graphql-middleware');
 const bodyParser = require('body-parser');
-const { createApolloSchema } = require('./gql/typeDefs');
-const expressPlayground = require('graphql-playground-middleware-express')
-  .default;
 const cookieParser = require('cookie-parser');
 const { verify } = require('jsonwebtoken');
+const cors = require('cors');
 
-const { createAccessToken, createRefreshToken } = require('./utils/auth');
+const { createAccessToken, createRefreshToken } = require('./utils/authTokens');
 const User = require('./models/user');
-const middleware = require('./utils/middleware');
-
-const schema = createApolloSchema();
-const schemaWithMiddleware = applyMiddleware(schema, ...middleware);
+const userRoutes = require('./routes/userRoutes');
+const saleRoutes = require('./routes/saleRoutes');
 
 const app = express();
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 
@@ -51,17 +55,8 @@ app.post('/refresh-token', async (req, res) => {
   return res.send({ ok: true, accessToken: createAccessToken(user) });
 });
 
-app.post(
-  '/graphql',
-  bodyParser.json(),
-  createGraphqlMiddleware({
-    context: ({ req, res, next }) => ({ req, res, next }),
-    formatError: ({ req, error }) => error,
-    schema: schemaWithMiddleware,
-  })
-);
-
-app.get('/playground', expressPlayground({ endpoint: '/graphql' }));
+app.use(userRoutes);
+app.use(saleRoutes);
 
 const PORT = process.env.PORT || 5000;
 
