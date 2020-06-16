@@ -2,9 +2,8 @@ import React, { useState, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import axios from 'axios';
-import cookie from 'js-cookie';
 
-import UserContext from './UserContext';
+import UserContext from '../components/UserContext';
 
 const Login = () => {
   const [input, setInput] = useState({ email: '', password: '' });
@@ -12,33 +11,22 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post(
-        '/graphql',
-        {
-          query: `mutation login($email: String!, $password: String!) {
-            login(email: $email, password: $password) {
-              name
-              id
-            }
-          }`,
-          variables: {
-            email: input.email,
-            password: input.password,
-          },
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
-        }
-      );
-      const { name, id } = res.data.data.login;
-      setUser({ name, id, cookie: cookie.get('access-token') });
-    } catch (err) {
-      console.error(err);
-    }
+    const res = await axios.post(
+      'http://localhost:5000/login',
+      {
+        email: input.email,
+        password: input.password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+
+    setUser({
+      name: res.data.user.name,
+      id: res.data.user._id,
+      accessToken: res.data.accessToken,
+    });
   };
 
   if (user.id) {

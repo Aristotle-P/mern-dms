@@ -4,8 +4,7 @@ const isAuth = (req, res, next) => {
   const authorization = req.headers['authorization'];
 
   if (!authorization) {
-    res.status(401).send('not authenticated');
-    next();
+    return res.status(401).send('not authenticated');
   }
 
   try {
@@ -14,8 +13,7 @@ const isAuth = (req, res, next) => {
     req.payload = payload;
     next();
   } catch (err) {
-    res.status(401).send('not authenticated');
-    next();
+    return res.status(401).send('not authenticated');
   }
 };
 

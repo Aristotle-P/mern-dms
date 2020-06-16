@@ -1,7 +1,6 @@
 require('dotenv').config();
 require('./db/mongoose');
 const express = require('express');
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { verify } = require('jsonwebtoken');
 const cors = require('cors');
@@ -48,8 +47,12 @@ app.post('/refresh-token', async (req, res) => {
     return res.send({ ok: false, accessToken: '' });
   }
 
+  const date = new Date();
+  date.setDate(date.getDate() + 7);
+
   res.cookie('jid', createRefreshToken(user), {
     httpOnly: true,
+    expires: date,
   });
 
   return res.send({ ok: true, accessToken: createAccessToken(user) });

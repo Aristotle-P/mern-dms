@@ -3,14 +3,14 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 
 const User = require('../models/user');
-const auth = require('../utils/authMiddleware');
+const isAuth = require('../utils/authMiddleware');
 const {
   createAccessToken,
   createRefreshToken,
 } = require('../utils/authTokens');
 
 // Get all users
-router.get('/users', auth, async (req, res) => {
+router.get('/users', isAuth, async (req, res) => {
   const users = await User.find();
   res.send(users);
 });
@@ -48,9 +48,12 @@ router.post('/login', async (req, res) => {
     res.status(404).send('Password incorrect');
   }
 
+  const date = new Date();
+  date.setDate(date.getDate() + 7);
+
   res.cookie('jid', createRefreshToken(user), {
     httpOnly: true,
-    path: '/refresh-token',
+    expires: date,
   });
 
   res.send({ accessToken: createAccessToken(user), user });
