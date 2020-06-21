@@ -16,8 +16,14 @@ const Users = () => {
       },
       withCredentials: true,
     });
-    setUsers(res.data);
-    setLoading(false);
+    try {
+      if (res.data) {
+        setUsers(res.data);
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
