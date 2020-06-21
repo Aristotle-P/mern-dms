@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import axios from 'axios';
+
+import { refreshToken, checkToken } from './utils/handleToken';
 
 import UserContext from './components/UserContext';
 import Home from './pages/Home';
@@ -14,19 +15,8 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const refreshToken = async () => {
-      const res = await axios.post(
-        'http://localhost:5000/refresh-token',
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      console.log(res.data);
-      setUser({ accessToken: res.data.accessToken });
-      setLoading(false);
-    };
-    refreshToken();
+    refreshToken(setUser, setLoading);
+    setLoading(false);
   }, []);
 
   if (loading) {

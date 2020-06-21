@@ -5,7 +5,7 @@ const createAccessToken = (user) => {
     { id: user.id, count: user.count },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: '15min',
+      expiresIn: '15m',
     }
   );
 

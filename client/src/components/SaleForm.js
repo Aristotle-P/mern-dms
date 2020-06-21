@@ -1,5 +1,4 @@
 import React from 'react';
-import VinSearch from './VinSearch';
 
 const SaleForm = ({
   handleSubmit,
@@ -9,7 +8,6 @@ const SaleForm = ({
 }) => {
   return (
     <div>
-      <VinSearch />
       <form onSubmit={handleSubmit}>
         <input type="date" name="date" onChange={handleInputChange} />
         <label htmlFor="stockNumber">Stocknumber</label>

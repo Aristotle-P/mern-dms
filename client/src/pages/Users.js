@@ -2,9 +2,10 @@ import React, { useState, useContext, useEffect } from 'react';
 import UserContext from '../components/UserContext';
 
 import axios from 'axios';
+import { checkToken } from '../utils/handleToken';
 
 const Users = () => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [users, setUsers] = useState();
   const [loading, setLoading] = useState(true);
 
@@ -20,8 +21,12 @@ const Users = () => {
   };
 
   useEffect(() => {
-    getUsers();
+    checkToken(user, setUser);
   }, []);
+
+  useEffect(() => {
+    getUsers();
+  }, [user.accessToken]);
 
   if (loading) {
     return <div>Loading...</div>;
