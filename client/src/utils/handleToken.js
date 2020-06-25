@@ -9,7 +9,23 @@ export const refreshToken = async (setUser) => {
       withCredentials: true,
     }
   );
-  setUser({ accessToken: res.data.accessToken });
+  const { accessToken } = res.data;
+  if (accessToken) {
+    console.log(accessToken);
+    const { id } = jwtDecode(accessToken);
+    try {
+      const userRes = await axios.get(`http://localhost:5000/user/${id}`);
+      console.log(userRes);
+      setUser({
+        accessToken: accessToken,
+        name: userRes.data.name,
+        id: userRes.data._id,
+        admin: userRes.data.admin,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
 };
 
 export const checkToken = (user, setUser) => {

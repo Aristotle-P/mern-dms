@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   email: {
     type: String,
@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
       if (!validator.isEmail(value)) {
         throw new Error('Valid email required');
       }
-    }
+    },
   },
   password: {
     type: String,
@@ -28,18 +28,22 @@ const userSchema = new mongoose.Schema({
       if (value.toLowerCase().includes('password')) {
         throw new Error('Password cannot include the word "password"');
       }
-    }
+    },
   },
   count: {
     type: Number,
-    default: 0
-  }
+    default: 0,
+  },
+  admin: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 userSchema.virtual('sales', {
   ref: 'Sale',
   localField: '_id',
-  foreignField: 'salesperson'
+  foreignField: 'salesperson',
 });
 
 const User = mongoose.model('User', userSchema);

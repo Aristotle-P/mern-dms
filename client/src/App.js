@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
-import { refreshToken, checkToken } from './utils/handleToken';
+import { refreshToken } from './utils/handleToken';
 
 import UserContext from './components/UserContext';
 import Home from './pages/Home';
@@ -11,11 +11,16 @@ import Users from './pages/Users';
 import './App.css';
 
 const App = () => {
-  const [user, setUser] = useState({ name: '', id: null, accessToken: null });
+  const [user, setUser] = useState({
+    name: '',
+    id: null,
+    accessToken: null,
+    admin: null,
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    refreshToken(setUser, setLoading);
+    refreshToken(setUser);
     setLoading(false);
   }, []);
 

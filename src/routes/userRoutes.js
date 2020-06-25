@@ -16,8 +16,8 @@ router.get('/users', isAuth, async (req, res) => {
 });
 
 // Get specific user
-router.get('/user', async (req, res) => {
-  const id = req.body.id;
+router.get('/user/:id', async (req, res) => {
+  const id = req.params.id;
   const user = await User.findById({ _id: id });
   res.send(user);
 });
@@ -29,7 +29,6 @@ router.post('/user', async (req, res) => {
   if (foundUser) {
     return res.send('Email already in use');
   }
-  console.log('made it here');
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = new User({ name, email, password: hashedPassword });
   await user.save();
