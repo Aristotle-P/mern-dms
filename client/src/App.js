@@ -4,9 +4,13 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { refreshToken } from './utils/handleToken';
 
 import UserContext from './components/UserContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Users from './pages/Users';
+import Dashboard from './pages/Dashboard';
+import Sales from './pages/Sales';
 
 import './App.css';
 
@@ -33,14 +37,28 @@ const App = () => {
       <Router>
         <div className="App">
           <header>
-            <Link to="/">Home</Link>
-            <Link to="/login">Login</Link>
-            <Link to="/users">Users</Link>
+            <button>
+              <Link to="/">Home</Link>
+            </button>
+            <button>
+              <Link to="/login">Login</Link>
+            </button>
+            <button>
+              <Link to="/users">Users</Link>
+            </button>
+            <button>
+              <Link to="/dashboard">Dashboard</Link>
+            </button>
+            <button>
+              <Link to="/sales">Sales</Link>
+            </button>
           </header>
           <Switch>
-            <Route path="/login" component={Login} />
-            <Route path="/users" component={Users} />
-            <Route path="/" component={Home} />
+            <ProtectedRoute exact path="/" component={Home} />
+            <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+            <Route exact path="/login" component={Login} />
+            <AdminRoute exact path="/users" component={Users} />
+            <ProtectedRoute exact path="/sales" component={Sales} />
           </Switch>
         </div>
       </Router>

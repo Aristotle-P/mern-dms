@@ -11,11 +11,9 @@ export const refreshToken = async (setUser) => {
   );
   const { accessToken } = res.data;
   if (accessToken) {
-    console.log(accessToken);
     const { id } = jwtDecode(accessToken);
     try {
       const userRes = await axios.get(`http://localhost:5000/user/${id}`);
-      console.log(userRes);
       setUser({
         accessToken: accessToken,
         name: userRes.data.name,

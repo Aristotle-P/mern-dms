@@ -3,45 +3,49 @@ const mongoose = require('mongoose');
 const saleSchema = new mongoose.Schema({
   date: {
     type: Date,
-    required: true
+    required: true,
   },
   stockNumber: {
     type: Number,
-    required: true
+    required: true,
   },
   source: {
-    type: String
+    type: String,
+    default: 'None',
   },
   warranty: {
-    type: Boolean
+    type: Boolean,
+    default: false,
   },
   finance: {
-    type: Boolean
+    type: Boolean,
+    default: false,
   },
   maintenance: {
-    type: Boolean
+    type: Boolean,
+    default: false,
   },
   customer: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   vehicle: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   frontGross: {
-    type: Number
+    type: Number,
   },
   backGross: {
-    type: Number
+    type: Number,
   },
   salesperson: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'User'
-  }
+    ref: 'User',
+  },
 });
 
 const Sale = mongoose.model('Sale', saleSchema);
