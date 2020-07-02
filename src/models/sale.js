@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const saleSchema = new mongoose.Schema({
+  new: {
+    type: Boolean,
+    required: true,
+  },
   date: {
     type: Date,
     required: true,

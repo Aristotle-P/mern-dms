@@ -21,6 +21,15 @@ const Sale = ({
   if (!maintenance) {
     maintenance = 'None';
   }
+
+  const formattedFrontGross = frontGross.toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
+  const formattedBackGross = backGross.toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
   return (
     <div>
       <li>{date}</li>
@@ -31,8 +40,8 @@ const Sale = ({
       <li>{maintenance}</li>
       <li>{customer}</li>
       <li>{vehicle}</li>
-      <li>{frontGross}</li>
-      <li>{backGross}</li>
+      <li>{formattedFrontGross}</li>
+      <li>{formattedBackGross}</li>
     </div>
   );
 };
