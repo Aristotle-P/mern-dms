@@ -22,26 +22,28 @@ const Sale = ({
     maintenance = 'None';
   }
 
-  const formattedFrontGross = frontGross.toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  });
-  const formattedBackGross = backGross.toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  });
+  const formatCurrency = (num) => {
+    const currency = (num / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    return currency;
+  }
+
+  const formattedFrontGross = formatCurrency(frontGross);
+  const formattedBackGross = formatCurrency(backGross);
   return (
     <div>
-      <li>{date}</li>
-      <li>{stockNumber}</li>
-      <li>{source}</li>
-      <li>{warranty}</li>
-      <li>{finance}</li>
-      <li>{maintenance}</li>
-      <li>{customer}</li>
-      <li>{vehicle}</li>
-      <li>{formattedFrontGross}</li>
-      <li>{formattedBackGross}</li>
+      <div>
+        <li>Date: {date}</li>
+        <li>Stocknumber: {stockNumber}</li>
+        <li>Source: {source}</li>
+        <li>Warranty: {warranty}</li>
+        <li>Finance: {finance}</li>
+        <li>Maintenance: {maintenance}</li>
+        <li>Customer: {customer}</li>
+        <li>Vehicle: {vehicle}</li>
+        <li>Front Gross: {formattedFrontGross}</li>
+        <li>Back Gross: {formattedBackGross}</li>
+      </div>
+      <div style={{ height: '20px', width: '100vw', backgroundColor: 'black' }}></div>
     </div>
   );
 };

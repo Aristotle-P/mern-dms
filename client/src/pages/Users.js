@@ -9,28 +9,28 @@ const Users = () => {
   const [users, setUsers] = useState();
   const [loading, setLoading] = useState(true);
 
-  const getUsers = async () => {
-    const res = await axios.get('http://localhost:5000/users', {
-      headers: {
-        authorization: `bearer ${user.accessToken}`,
-      },
-      withCredentials: true,
-    });
-    try {
-      if (res.data) {
-        setUsers(res.data);
-        setLoading(false);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
     checkToken(user, setUser);
   }, []);
 
   useEffect(() => {
+    const getUsers = async () => {
+      const res = await axios.get('http://localhost:5000/users', {
+        headers: {
+          authorization: `bearer ${user.accessToken}`,
+        },
+        withCredentials: true,
+      });
+      try {
+        if (res.data) {
+          setUsers(res.data);
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     getUsers();
   }, [user.accessToken]);
 

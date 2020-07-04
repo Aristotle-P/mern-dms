@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const saleSchema = new mongoose.Schema({
-  new: {
+  used: {
     type: Boolean,
     required: true,
   },

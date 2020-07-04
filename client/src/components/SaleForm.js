@@ -6,10 +6,35 @@ const SaleForm = ({
   handleCheckboxChange,
   input,
 }) => {
+
+  const handleBlur = (e) => {
+    const localeStringToNumber = (string) => {
+      return Number(String(string).replace(/[^0-9.-]+/g, ""))
+    }
+
+    const { value } = e.target
+
+    const options = {
+      maxiumumFractionDigits: 2,
+      currency: 'USD',
+      style: 'currency',
+      currencyDisplay: 'symbol'
+    }
+
+    e.target.value = value ? localeStringToNumber(value).toLocaleString(undefined, options) : '';
+  }
+
+  const handleFocus = (e) => {
+    e.target.select();
+    console.log(e.target.value);
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <input type="date" name="date" onChange={handleInputChange} />
+        <label htmlFor="used">Used</label>
+        <input type="checkbox" name="used" checked={input.used} onChange={handleCheckboxChange} />
         <label htmlFor="stockNumber">Stocknumber</label>
         <input
           type="number"
@@ -64,17 +89,23 @@ const SaleForm = ({
         />
         <label htmlFor="frontGross">Front Gross</label>
         <input
-          type="number"
+          type="currency"
           name="frontGross"
           id="frontGross"
+          placeholder="$0.00"
           onChange={handleInputChange}
+          onBlur={handleBlur}
+          onFocus={handleFocus}
         />
         <label htmlFor="backGross">Back Gross</label>
         <input
-          type="number"
+          type="currency"
           name="backGross"
           id="backGross"
+          placeholder="$0.00"
           onChange={handleInputChange}
+          onBlur={handleBlur}
+          onFocus={handleFocus}
         />
         <input type="submit" value="Create" />
       </form>

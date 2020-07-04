@@ -8,6 +8,7 @@ const Home = () => {
   const { user } = useContext(UserContext);
   const [input, setInput] = useState({
     date: null,
+    used: false,
     stockNumber: null,
     source: '',
     warranty: false,
@@ -24,6 +25,7 @@ const Home = () => {
     e.target.reset();
     axios.post('http://localhost:5000/sale', {
       date: input.date,
+      used: input.used,
       stockNumber: input.stockNumber,
       source: input.source,
       warranty: input.warranty,
@@ -37,10 +39,26 @@ const Home = () => {
   };
 
   const handleInputChange = (e) => {
-    if (e.target.type !== 'number') {
+    if (e.target.name !== 'frontGross' && e.target.name !== 'backGross') {
       return setInput({ ...input, [e.target.name]: e.target.value });
     }
-    setInput({ ...input, [e.target.name]: parseInt(e.target.value) });
+
+    const localeStringToNumber = (string) => {
+      return Number(String(string).replace(/[^0-9.-]+/g, ""))
+    }
+
+    const { value } = e.target
+
+    const options = {
+      maxiumumFractionDigits: 2,
+      currency: 'USD',
+      style: 'currency',
+      currencyDisplay: 'symbol'
+    }
+
+    const localeString = value ? localeStringToNumber(value).toLocaleString(undefined, options) : '';
+
+    setInput({ ...input, [e.target.name]: localeString });
   };
 
   const handleCheckboxChange = (e) => {

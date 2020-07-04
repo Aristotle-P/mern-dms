@@ -8,18 +8,20 @@ const Sales = () => {
   const { user } = useContext(UserContext);
   const [sales, setSales] = useState();
   const [loading, setLoading] = useState(true);
-  const getSales = async () => {
-    const res = await axios.get(`http://localhost:5000/sales/${user.id}`);
-    try {
-      if (res.data) {
-        setSales(res.data);
-        setLoading(false);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+
   useEffect(() => {
+    const getSales = async () => {
+      const res = await axios.get(`http://localhost:5000/sales/${user.id}`);
+      try {
+        if (res.data) {
+          setSales(res.data);
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     getSales();
   }, []);
 
@@ -62,12 +64,12 @@ const Sales = () => {
 
   let frontGross = 0;
   sales.forEach((sale) => {
-    frontGross += sale.frontGross;
+    frontGross += sale.frontGross / 100;
   });
 
   let backGross = 0;
   sales.forEach((sale) => {
-    backGross += sale.backGross;
+    backGross += sale.backGross / 100;
   });
 
   const getVolumeBonus = (volume) => {
@@ -108,31 +110,76 @@ const Sales = () => {
   };
 
   const getNewVehicleBonus = (volume) => {
-    if (volume <= 5) {
-      console.log('20%');
-    } else if (volume >= 6 && volume <= 10) {
-      console.log('25%');
+    if (volume === 4) {
+      console.log('400');
+    } else if (volume === 5) {
+      console.log('500');
+    } else if (volume === 6) {
+      console.log('600');
+    } else if (volume === 7) {
+      console.log('700');
+    } else if (volume === 8) {
+      console.log('800');
+    } else if (volume === 9) {
+      console.log('900');
     } else if (volume === 10) {
-      console.log('30%');
-    } else if (volume === 11) {
-      console.log('32%');
+      console.log('1000');
     } else if (volume === 12) {
-      console.log('34%');
-    } else if (volume === 13) {
-      console.log('36%');
+      console.log('1200');
     } else if (volume === 14) {
-      console.log('38%');
-    } else if (volume >= 15) {
-      console.log('40%');
+      console.log('1500');
     }
   };
 
+  const getInternetTotalBonus = (gross) => {
+    if (gross >= 10000 && gross <= 14999) {
+      console.log('400');
+    } else if (gross >= 15000 && gross <= 19999) {
+      console.log('500');
+    } else if (gross >= 20000 && gross <= 24999) {
+      console.log('600');
+    } else if (gross >= 25000 && gross <= 29999) {
+      console.log('700');
+    } else if (gross >= 30000 && gross <= 34999) {
+      console.log('1000');
+    } else if (gross >= 35000 && gross <= 39999) {
+      console.log('1500');
+    } else if (gross >= 40000) {
+      console.log('2000');
+    }
+  }
+
+  const getFloorTotalBonus = (gross) => {
+    if (gross >= 20000 && gross <= 29999) {
+      console.log('400');
+    } else if (gross >= 30000 && gross <= 39999) {
+      console.log('500');
+    } else if (gross >= 40000 && gross <= 49999) {
+      console.log('600');
+    } else if (gross >= 50000 && gross <= 59999) {
+      console.log('700');
+    } else if (gross >= 60000 && gross <= 69999) {
+      console.log('1000');
+    } else if (gross >= 70000 && gross <= 79999) {
+      console.log('1500');
+    } else if (gross >= 80000) {
+      console.log('2000');
+    }
+  }
+
+  const getTrackingFrontGross = (frontGross) => {
+
+  }
+
   getVolumeBonus(newSales + usedSales);
+  getNewVehicleBonus(newSales);
+  getInternetTotalBonus(frontGross + backGross);
+  getFloorTotalBonus(frontGross + backGross);
 
   return (
     <div>
-      <li>{newSales}</li>
-      <li>{usedSales}</li>
+      <li>Total New Sales: {newSales}</li>
+      <li>Total Used Sales: {usedSales}</li>
       {salesMarkup}
       <div></div>
     </div>
