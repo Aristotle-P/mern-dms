@@ -48,6 +48,15 @@ const Sales = () => {
     );
   });
 
+  const getDaysLeft = () => {
+    const currentDate = new Date;
+    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+    const sellingDays = endOfMonth - 1;
+    const daysSold = currentDate.getDate() - 1;
+    const daysObject = { sellingDays, daysSold }
+    return daysObject;
+  }
+
   let newSales = 0;
   sales.forEach((sale) => {
     if (sale.new) {
@@ -168,13 +177,23 @@ const Sales = () => {
   }
 
   const getTrackingFrontGross = (frontGross) => {
+    const days = getDaysLeft();
+    const trackedGross = frontGross / days.daysSold * days.sellingDays;
+    console.log(trackedGross);
+  }
 
+  const getTrackingBackGross = (backGross) => {
+    const days = getDaysLeft();
+    const trackedGross = backGross / days.daysSold * days.sellingDays;
+    console.log(trackedGross);
   }
 
   getVolumeBonus(newSales + usedSales);
   getNewVehicleBonus(newSales);
   getInternetTotalBonus(frontGross + backGross);
   getFloorTotalBonus(frontGross + backGross);
+  getTrackingFrontGross(frontGross);
+  getTrackingBackGross(backGross);
 
   return (
     <div>
