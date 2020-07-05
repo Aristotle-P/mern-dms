@@ -3,10 +3,16 @@ import axios from 'axios';
 
 import UserContext from '../components/UserContext';
 import Sale from '../components/Sale';
+import Tracking from '../components/Tracking';
 
 const Sales = () => {
   const { user } = useContext(UserContext);
   const [sales, setSales] = useState();
+  const [frontGross, setFrontGross] = useState(0);
+  const [backGross, setBackGross] = useState(0);
+  const [totalGross, setTotalGross] = useState(0);
+  const [newSales, setNewSales] = useState(0);
+  const [usedSales, setUsedSales] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,6 +30,47 @@ const Sales = () => {
 
     getSales();
   }, []);
+
+  useEffect(() => {
+    if (sales) {
+      let tempNewSales = 0;
+      sales.forEach((sale) => {
+        if (sale.new) {
+          tempNewSales++;
+        }
+      });
+      setNewSales(tempNewSales);
+
+      let tempUsedSales = 0;
+      sales.forEach((sale) => {
+        if (!sale.new) {
+          tempUsedSales++;
+        }
+      });
+      setUsedSales(tempUsedSales);
+    }
+  }, [sales])
+
+  useEffect(() => {
+    if (sales) {
+      let tempFrontGross = 0;
+      sales.forEach((sale) => {
+        tempFrontGross += sale.frontGross / 100;
+      });
+
+      setFrontGross(tempFrontGross);
+
+      let tempBackGross = 0;
+      sales.forEach((sale) => {
+        tempBackGross += sale.backGross / 100;
+      });
+
+      setBackGross(tempBackGross);
+
+      const tempTotalGross = tempBackGross + tempFrontGross;
+      setTotalGross(tempTotalGross);
+    };
+  }, [sales]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -48,159 +95,14 @@ const Sales = () => {
     );
   });
 
-  const getDaysLeft = () => {
-    const currentDate = new Date;
-    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-    const sellingDays = endOfMonth - 1;
-    const daysSold = currentDate.getDate() - 1;
-    const daysObject = { sellingDays, daysSold }
-    return daysObject;
-  }
-
-  let newSales = 0;
-  sales.forEach((sale) => {
-    if (sale.new) {
-      newSales++;
-    }
-  });
-
-  let usedSales = 0;
-  sales.forEach((sale) => {
-    if (!sale.new) {
-      usedSales++;
-    }
-  });
-
-  let frontGross = 0;
-  sales.forEach((sale) => {
-    frontGross += sale.frontGross / 100;
-  });
-
-  let backGross = 0;
-  sales.forEach((sale) => {
-    backGross += sale.backGross / 100;
-  });
-
-  const getVolumeBonus = (volume) => {
-    if (volume <= 5) {
-      const gross = backGross + frontGross;
-      console.log(gross);
-      const newGross = (20 / 100) * gross;
-      console.log(newGross);
-    } else if (volume >= 6 && volume <= 10) {
-      const gross = backGross + frontGross;
-      const newGross = gross + (25 / 100) * gross;
-      console.log(newGross);
-    } else if (volume === 10) {
-      const gross = backGross + frontGross;
-      const newGross = (30 / 100) * gross;
-      console.log(newGross);
-    } else if (volume === 11) {
-      const gross = backGross + frontGross;
-      const newGross = (32 / 100) * gross;
-      console.log(newGross);
-    } else if (volume === 12) {
-      const gross = backGross + frontGross;
-      const newGross = (34 / 100) * gross;
-      console.log(newGross);
-    } else if (volume === 13) {
-      const gross = backGross + frontGross;
-      const newGross = (36 / 100) * gross;
-      console.log(newGross);
-    } else if (volume === 14) {
-      const gross = backGross + frontGross;
-      const newGross = (38 / 100) * gross;
-      console.log(newGross);
-    } else if (volume >= 15) {
-      const gross = backGross + frontGross;
-      const newGross = (40 / 100) * gross;
-      console.log(newGross);
-    }
-  };
-
-  const getNewVehicleBonus = (volume) => {
-    if (volume === 4) {
-      console.log('400');
-    } else if (volume === 5) {
-      console.log('500');
-    } else if (volume === 6) {
-      console.log('600');
-    } else if (volume === 7) {
-      console.log('700');
-    } else if (volume === 8) {
-      console.log('800');
-    } else if (volume === 9) {
-      console.log('900');
-    } else if (volume === 10) {
-      console.log('1000');
-    } else if (volume === 12) {
-      console.log('1200');
-    } else if (volume === 14) {
-      console.log('1500');
-    }
-  };
-
-  const getInternetTotalBonus = (gross) => {
-    if (gross >= 10000 && gross <= 14999) {
-      console.log('400');
-    } else if (gross >= 15000 && gross <= 19999) {
-      console.log('500');
-    } else if (gross >= 20000 && gross <= 24999) {
-      console.log('600');
-    } else if (gross >= 25000 && gross <= 29999) {
-      console.log('700');
-    } else if (gross >= 30000 && gross <= 34999) {
-      console.log('1000');
-    } else if (gross >= 35000 && gross <= 39999) {
-      console.log('1500');
-    } else if (gross >= 40000) {
-      console.log('2000');
-    }
-  }
-
-  const getFloorTotalBonus = (gross) => {
-    if (gross >= 20000 && gross <= 29999) {
-      console.log('400');
-    } else if (gross >= 30000 && gross <= 39999) {
-      console.log('500');
-    } else if (gross >= 40000 && gross <= 49999) {
-      console.log('600');
-    } else if (gross >= 50000 && gross <= 59999) {
-      console.log('700');
-    } else if (gross >= 60000 && gross <= 69999) {
-      console.log('1000');
-    } else if (gross >= 70000 && gross <= 79999) {
-      console.log('1500');
-    } else if (gross >= 80000) {
-      console.log('2000');
-    }
-  }
-
-  const getTrackingFrontGross = (frontGross) => {
-    const days = getDaysLeft();
-    const trackedGross = frontGross / days.daysSold * days.sellingDays;
-    console.log(trackedGross);
-  }
-
-  const getTrackingBackGross = (backGross) => {
-    const days = getDaysLeft();
-    const trackedGross = backGross / days.daysSold * days.sellingDays;
-    console.log(trackedGross);
-  }
-
-  getVolumeBonus(newSales + usedSales);
-  getNewVehicleBonus(newSales);
-  getInternetTotalBonus(frontGross + backGross);
-  getFloorTotalBonus(frontGross + backGross);
-  getTrackingFrontGross(frontGross);
-  getTrackingBackGross(backGross);
-
   return (
     <div>
       <li>Total New Sales: {newSales}</li>
       <li>Total Used Sales: {usedSales}</li>
       {salesMarkup}
-      <div></div>
+      <div>
+        <Tracking newSales={newSales} usedSales={usedSales} frontGross={frontGross} backGross={backGross} totalGross={totalGross} />
+      </div>
     </div>
   );
 };
