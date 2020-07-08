@@ -11,6 +11,7 @@ import Login from './pages/Login';
 import Users from './pages/Users';
 import Dashboard from './pages/Dashboard';
 import Sales from './pages/Sales';
+import User from './pages/User';
 
 import './App.css';
 
@@ -58,7 +59,8 @@ const App = () => {
             <ProtectedRoute exact path="/dashboard" component={Dashboard} />
             <Route exact path="/login" component={Login} />
             <AdminRoute exact path="/users" component={Users} />
-            <ProtectedRoute exact path="/sales" component={Sales} />
+            <AdminRoute exact path="/sales" component={Sales} />
+            <AdminRoute exact path="/user/:name" component={User} />
           </Switch>
         </div>
       </Router>

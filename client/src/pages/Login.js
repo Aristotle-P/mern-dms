@@ -26,6 +26,7 @@ const Login = () => {
       name: res.data.user.name,
       id: res.data.user._id,
       accessToken: res.data.accessToken,
+      admin: res.data.user.admin,
     });
   };
 

@@ -3,7 +3,7 @@ const router = express.Router();
 
 const Sale = require('../models/sale');
 
-// Get all sales
+// Get all sales from salesperson
 router.get('/sales/:id', async (req, res) => {
   try {
     const sales = await Sale.find({ salesperson: req.params.id });

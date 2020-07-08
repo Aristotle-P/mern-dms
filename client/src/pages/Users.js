@@ -3,6 +3,7 @@ import UserContext from '../components/UserContext';
 
 import axios from 'axios';
 import { checkToken } from '../utils/handleToken';
+import { Link } from 'react-router-dom';
 
 const Users = () => {
   const { user, setUser } = useContext(UserContext);
@@ -42,7 +43,20 @@ const Users = () => {
     <div>
       <ul>
         {users.map((user) => {
-          return <li key={user._id}>{user.name}</li>;
+          return (
+            <li key={user._id}>
+              <Link
+                to={{
+                  pathname: `/user/${user.name
+                    .replace(/ /g, '-')
+                    .toLowerCase()}`,
+                  state: { userId: user._id },
+                }}
+              >
+                {user.name}
+              </Link>
+            </li>
+          );
         })}
       </ul>
     </div>
