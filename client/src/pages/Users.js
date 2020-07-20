@@ -1,13 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import UserContext from '../components/UserContext';
+import UserLink from '../components/UserLink';
 
 import axios from 'axios';
 import { checkToken } from '../utils/handleToken';
-import { Link } from 'react-router-dom';
 
 const Users = () => {
   const { user, setUser } = useContext(UserContext);
-  const [users, setUsers] = useState();
+  const [userStats, setUserStats] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,24 +15,36 @@ const Users = () => {
   }, []);
 
   useEffect(() => {
-    const getUsers = async () => {
-      const res = await axios.get('http://localhost:5000/users', {
+    const getUserData = async () => {
+      const usersRes = axios.get('http://localhost:5000/users', {
         headers: {
           authorization: `bearer ${user.accessToken}`,
         },
         withCredentials: true,
       });
-      try {
-        if (res.data) {
-          setUsers(res.data);
-          setLoading(false);
-        }
-      } catch (err) {
-        console.error(err);
-      }
+      const salesRes = axios.get(`http://localhost:5000/sales`);
+      const res = [await usersRes, await salesRes];
+      res[0].data.forEach((user) => {
+        const stats = {
+          name: user.name,
+          userId: user._id,
+          sales: 0,
+          frontGross: 0,
+          backGross: 0,
+        };
+        res[1].data.forEach((sale) => {
+          if (sale.salesperson === user._id) {
+            stats.frontGross += sale.frontGross;
+            stats.backGross = +sale.backGross;
+            stats.sales++;
+          }
+        });
+        setUserStats((currentStats) => [...currentStats, stats]);
+        setLoading(false);
+      });
     };
 
-    getUsers();
+    getUserData();
   }, [user.accessToken]);
 
   if (loading) {
@@ -41,24 +53,9 @@ const Users = () => {
 
   return (
     <div>
-      <ul>
-        {users.map((user) => {
-          return (
-            <li key={user._id}>
-              <Link
-                to={{
-                  pathname: `/user/${user.name
-                    .replace(/ /g, '-')
-                    .toLowerCase()}`,
-                  state: { userId: user._id },
-                }}
-              >
-                {user.name}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      {userStats.map((user) => {
+        return <UserLink key={user.userId} userStats={user} />;
+      })}
     </div>
   );
 };

@@ -23,27 +23,26 @@ const Sale = ({
   }
 
   const formatCurrency = (num) => {
-    const currency = (num / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    const currency = (num / 100).toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    });
     return currency;
-  }
+  };
 
   const formattedFrontGross = formatCurrency(frontGross);
   const formattedBackGross = formatCurrency(backGross);
   return (
-    <div>
-      <div>
-        <li>Date: {date}</li>
-        <li>Stocknumber: {stockNumber}</li>
-        <li>Source: {source}</li>
-        <li>Warranty: {warranty}</li>
-        <li>Finance: {finance}</li>
-        <li>Maintenance: {maintenance}</li>
-        <li>Customer: {customer}</li>
-        <li>Vehicle: {vehicle}</li>
-        <li>Front Gross: {formattedFrontGross}</li>
-        <li>Back Gross: {formattedBackGross}</li>
-      </div>
-      <div style={{ height: '20px', width: '100vw', backgroundColor: 'black' }}></div>
+    <div className="sale-data-container">
+      <div>Date: {date}</div>
+      <div>Stocknumber: {stockNumber}</div>
+      <div>Warranty: {warranty}</div>
+      <div>Finance: {finance}</div>
+      <div>Maintenance: {maintenance}</div>
+      <div>Customer: {customer}</div>
+      <div>Vehicle: {vehicle}</div>
+      <div>Front Gross: {formattedFrontGross}</div>
+      <div>Back Gross: {formattedBackGross}</div>
     </div>
   );
 };

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const User = ({ location }) => {
-  const { userId } = location.state;
+import Sale from '../components/Sale';
+import '../css/style.css';
+
+const User = (props) => {
+  const { userId } = props.match.params;
   const [currentUser, setCurrentUser] = useState({});
-  const [sales, setSales] = useState({});
+  const [sales, setSales] = useState([]);
   useEffect(() => {
     const getUser = async () => {
       const userRes = axios.get(`http://localhost:5000/user/${userId}`);
@@ -22,21 +25,7 @@ const User = ({ location }) => {
       }
       try {
         if (res[1]) {
-          res[1].data.forEach((sale) => {
-            setSales({
-              source: sale.source,
-              warranty: sale.warranty,
-              finance: sale.finance,
-              maintenance: sale.maintenance,
-              new: sale.new,
-              date: sale.date,
-              stockNumber: sale.stockNumber,
-              customer: sale.customer,
-              vehicle: sale.vehicle,
-              frontGross: sale.frontGross / 100,
-              backGross: sale.backGross / 100,
-            });
-          });
+          setSales(res[1].data);
         }
       } catch (err) {
         console.log(err);
@@ -44,23 +33,43 @@ const User = ({ location }) => {
     };
     getUser();
   }, []);
+
+  const salesMarkup = sales.map((sale) => {
+    return (
+      <Sale
+        new={sale.new}
+        date={sale.date}
+        stockNumber={sale.stockNumber}
+        warranty={sale.warranty}
+        finance={sale.finance}
+        maintenance={sale.maintenance}
+        customer={sale.customer}
+        vehicle={sale.vehicle}
+        frontGross={sale.frontGross}
+        backGross={sale.backGross}
+        key={sale._id}
+      />
+    );
+  });
+
   return (
     <div>
       <h1>
         {currentUser.name} | {currentUser.email}
       </h1>
-      <ul>
-        <li>Date: {sales.date}</li>
-        <li>Stocknumber: {sales.stockNumber}</li>
-        <li>Source: {sales.source}</li>
-        <li>Warranty: {sales.warranty}</li>
-        <li>Finance: {sales.finance}</li>
-        <li>Maintenance: {sales.maintenance}</li>
-        <li>Customer: {sales.customer}</li>
-        <li>Vehicle: {sales.vehicle}</li>
-        <li>Front Gross: {sales.frontGross}</li>
-        <li>Back Gross: {sales.backGross}</li>
-      </ul>
+      <div className="sale-data-header">
+        <h3>New/Used</h3>
+        <h3>Date</h3>
+        <h3>Stock Number</h3>
+        <h3>Warranty</h3>
+        <h3>Finance</h3>
+        <h3>Maintenance</h3>
+        <h3>Customer</h3>
+        <h3>Vehicle</h3>
+        <h3>Front Gross</h3>
+        <h3>Back Gross</h3>
+      </div>
+      <div>{salesMarkup}</div>
     </div>
   );
 };

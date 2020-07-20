@@ -60,7 +60,7 @@ const App = () => {
             <Route exact path="/login" component={Login} />
             <AdminRoute exact path="/users" component={Users} />
             <AdminRoute exact path="/sales" component={Sales} />
-            <AdminRoute exact path="/user/:name" component={User} />
+            <AdminRoute exact path="/user/:userId" component={User} />
           </Switch>
         </div>
       </Router>

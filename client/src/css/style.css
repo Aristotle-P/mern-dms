@@ -1,0 +1,20 @@
+.sale-data-header {
+  display: flex;
+  justify-content: space-around;
+}
+
+.sale-data-container {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+
+.user-link-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.user-link-container div {
+  height: 50px;
+  width: 100px;
+}

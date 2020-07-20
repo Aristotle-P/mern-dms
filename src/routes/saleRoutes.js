@@ -3,6 +3,16 @@ const router = express.Router();
 
 const Sale = require('../models/sale');
 
+// Get all sales
+router.get('/sales', async (req, res) => {
+  try {
+    const sales = await Sale.find();
+    res.send(sales);
+  } catch (err) {
+    res.status(404).send('No sales found');
+  }
+});
+
 // Get all sales from salesperson
 router.get('/sales/:id', async (req, res) => {
   try {
