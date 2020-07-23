@@ -20,8 +20,8 @@
 }
 
 .user-link-container div {
-  height: 50px;
-  width: 100px;
+  min-height: 50px;
+  min-width: 100px;
 }
 
 .tracking-container {

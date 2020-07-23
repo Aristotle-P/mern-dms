@@ -28,7 +28,8 @@ const Users = () => {
         const stats = {
           name: user.name,
           userId: user._id,
-          sales: 0,
+          newSales: 0,
+          usedSales: 0,
           frontGross: 0,
           backGross: 0,
         };
@@ -36,7 +37,10 @@ const Users = () => {
           if (sale.salesperson === user._id) {
             stats.frontGross += sale.frontGross;
             stats.backGross = +sale.backGross;
-            stats.sales++;
+            if (sale.used === true) {
+              stats.usedSales++;
+            }
+            stats.newSales++;
           }
         });
         setUserStats((currentStats) => [...currentStats, stats]);
