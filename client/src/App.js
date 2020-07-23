@@ -6,11 +6,9 @@ import { refreshToken } from './utils/handleToken';
 import UserContext from './components/UserContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
-import Home from './pages/Home';
 import Login from './pages/Login';
 import Users from './pages/Users';
 import Dashboard from './pages/Dashboard';
-import Sales from './pages/Sales';
 import User from './pages/User';
 
 import './App.css';
@@ -23,6 +21,11 @@ const App = () => {
     admin: null,
   });
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalDisplay = () => {
+    setShowModal(!showModal);
+  };
 
   useEffect(() => {
     refreshToken(setUser);
@@ -36,7 +39,14 @@ const App = () => {
   return (
     <UserContext.Provider value={{ user, setUser }}>
       <Router>
-        <div className="App">
+        <div
+          className="App"
+          onClick={() => {
+            if (showModal === true) {
+              setShowModal(false);
+            }
+          }}
+        >
           <header>
             <button>
               <Link to="/">Home</Link>
@@ -47,19 +57,17 @@ const App = () => {
             <button>
               <Link to="/users">Users</Link>
             </button>
-            <button>
-              <Link to="/dashboard">Dashboard</Link>
-            </button>
-            <button>
-              <Link to="/sales">Sales</Link>
-            </button>
           </header>
           <Switch>
-            <ProtectedRoute exact path="/" component={Home} />
-            <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+            <ProtectedRoute
+              exact
+              path="/"
+              component={Dashboard}
+              handleModalDisplay={handleModalDisplay}
+              showModal={showModal}
+            />
             <Route exact path="/login" component={Login} />
             <AdminRoute exact path="/users" component={Users} />
-            <AdminRoute exact path="/sales" component={Sales} />
             <AdminRoute exact path="/user/:userId" component={User} />
           </Switch>
         </div>

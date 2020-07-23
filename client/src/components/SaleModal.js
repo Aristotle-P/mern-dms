@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import axios from 'axios';
 
-import UserContext from '../components/UserContext';
-import SaleForm from '../components/SaleForm';
+import UserContext from './UserContext';
+import SaleForm from './SaleForm';
 
-const Home = () => {
+const SaleModal = ({ showModal, handleModalDisplay }) => {
   const { user } = useContext(UserContext);
   const [input, setInput] = useState({
     date: null,
@@ -36,6 +36,7 @@ const Home = () => {
       backGross: input.backGross,
       salesperson: user.id,
     });
+    handleModalDisplay();
   };
 
   const handleInputChange = (e) => {
@@ -44,19 +45,21 @@ const Home = () => {
     }
 
     const localeStringToNumber = (string) => {
-      return Number(String(string).replace(/[^0-9.-]+/g, ""))
-    }
+      return Number(String(string).replace(/[^0-9.-]+/g, ''));
+    };
 
-    const { value } = e.target
+    const { value } = e.target;
 
     const options = {
       maxiumumFractionDigits: 2,
       currency: 'USD',
       style: 'currency',
-      currencyDisplay: 'symbol'
-    }
+      currencyDisplay: 'symbol',
+    };
 
-    const localeString = value ? localeStringToNumber(value).toLocaleString(undefined, options) : '';
+    const localeString = value
+      ? localeStringToNumber(value).toLocaleString(undefined, options)
+      : '';
 
     setInput({ ...input, [e.target.name]: localeString });
   };
@@ -64,9 +67,19 @@ const Home = () => {
   const handleCheckboxChange = (e) => {
     setInput({ ...input, [e.target.name]: !!e.target.checked });
   };
-
+  if (!showModal) {
+    return <React.Fragment />;
+  }
   return (
-    <div>
+    <div
+      className="sale-modal"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      <button className="modal-close" onClick={handleModalDisplay}>
+        X
+      </button>
       <h1>You're logged in!</h1>
       <SaleForm
         handleSubmit={handleSubmit}
@@ -78,4 +91,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default SaleModal;

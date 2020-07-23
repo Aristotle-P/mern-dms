@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 
-const Tracking = ({ newSales, usedSales, frontGross, backGross, totalGross }) => {
-
-  const [volumeBonus, setVolumeBonus] = useState()
-  const [newVehicleBonus, setNewVehicleBonus] = useState()
+const Tracking = ({
+  newSales,
+  usedSales,
+  frontGross,
+  backGross,
+  totalGross,
+}) => {
+  const [volumeBonus, setVolumeBonus] = useState();
+  const [newVehicleBonus, setNewVehicleBonus] = useState();
   const [internetTotalBonus, setInternetTotalBonus] = useState();
   const [floorTotalBonus, setFloorTotalBonus] = useState();
   const [trackingFrontGross, setTrackingFrontGross] = useState();
@@ -12,13 +17,17 @@ const Tracking = ({ newSales, usedSales, frontGross, backGross, totalGross }) =>
 
   useEffect(() => {
     const getDaysLeft = () => {
-      const currentDate = new Date;
-      const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+      const currentDate = new Date();
+      const endOfMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        0
+      ).getDate();
       const sellingDays = endOfMonth - 1;
       const daysSold = currentDate.getDate() - 1;
-      const daysObject = { sellingDays, daysSold }
+      const daysObject = { sellingDays, daysSold };
       return daysObject;
-    }
+    };
 
     const getVolumeBonus = (volume) => {
       if (volume <= 5) {
@@ -101,7 +110,7 @@ const Tracking = ({ newSales, usedSales, frontGross, backGross, totalGross }) =>
       } else if (gross >= 40000) {
         setInternetTotalBonus(2000);
       }
-    }
+    };
 
     const getFloorTotalBonus = (gross) => {
       if (gross >= 20000 && gross <= 29999) {
@@ -119,25 +128,25 @@ const Tracking = ({ newSales, usedSales, frontGross, backGross, totalGross }) =>
       } else if (gross >= 80000) {
         setFloorTotalBonus(2000);
       }
-    }
+    };
 
     const getTrackingFrontGross = (frontGross) => {
       const days = getDaysLeft();
-      const trackedGross = frontGross / days.daysSold * days.sellingDays;
+      const trackedGross = (frontGross / days.daysSold) * days.sellingDays;
       setTrackingFrontGross(trackedGross);
-    }
+    };
 
     const getTrackingBackGross = (backGross) => {
       const days = getDaysLeft();
-      const trackedGross = backGross / days.daysSold * days.sellingDays;
+      const trackedGross = (backGross / days.daysSold) * days.sellingDays;
       setTrackingBackGross(trackedGross);
-    }
+    };
 
     const getTrackingTotalGross = (gross) => {
       const days = getDaysLeft();
-      const trackedGross = gross / days.daysSold * days.sellingDays;
+      const trackedGross = (gross / days.daysSold) * days.sellingDays;
       setTrackingTotalGross(trackedGross);
-    }
+    };
 
     getVolumeBonus(newSales + usedSales);
     getNewVehicleBonus(4);
@@ -146,12 +155,10 @@ const Tracking = ({ newSales, usedSales, frontGross, backGross, totalGross }) =>
     getTrackingFrontGross(frontGross);
     getTrackingBackGross(backGross);
     getTrackingTotalGross(totalGross);
-  }, [])
-
-
+  }, []);
 
   return (
-    <div>
+    <div className="tracking-container">
       <ul>
         <li>Volume Bonus: {volumeBonus}</li>
         <li>New Vehicle Bonus: {newVehicleBonus}</li>
@@ -162,7 +169,7 @@ const Tracking = ({ newSales, usedSales, frontGross, backGross, totalGross }) =>
         <li>Tracking Total Gross: {trackingTotalGross}</li>
       </ul>
     </div>
-  )
-}
+  );
+};
 
-export default Tracking
+export default Tracking;
