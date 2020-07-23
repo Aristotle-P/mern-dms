@@ -9,6 +9,11 @@
   margin-bottom: 1rem;
 }
 
+.sale-data-container div {
+  height: 50px;
+  min-width: 200px;
+}
+
 .user-link-container {
   display: flex;
   justify-content: space-around;

@@ -80,7 +80,6 @@ const SaleModal = ({ showModal, handleModalDisplay }) => {
       <button className="modal-close" onClick={handleModalDisplay}>
         X
       </button>
-      <h1>You're logged in!</h1>
       <SaleForm
         handleSubmit={handleSubmit}
         handleInputChange={handleInputChange}
