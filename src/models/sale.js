@@ -5,6 +5,10 @@ const saleSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  half: {
+    type: Boolean,
+    required: true,
+  },
   date: {
     type: Date,
     required: true,
@@ -12,10 +16,6 @@ const saleSchema = new mongoose.Schema({
   stockNumber: {
     type: Number,
     required: true,
-  },
-  source: {
-    type: String,
-    default: 'None',
   },
   warranty: {
     type: Boolean,

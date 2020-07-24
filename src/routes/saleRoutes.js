@@ -40,6 +40,7 @@ router.get('/sale', async (req, res) => {
 router.post('/sale', async (req, res) => {
   const {
     used,
+    half,
     stockNumber,
     source,
     warranty,
@@ -58,6 +59,7 @@ router.post('/sale', async (req, res) => {
 
   const sale = new Sale({
     used,
+    half,
     date,
     stockNumber,
     source,

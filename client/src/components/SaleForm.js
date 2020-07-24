@@ -4,49 +4,54 @@ const SaleForm = ({
   handleSubmit,
   handleInputChange,
   handleCheckboxChange,
+  handleDropdownChange,
   input,
 }) => {
-
   const handleBlur = (e) => {
     const localeStringToNumber = (string) => {
-      return Number(String(string).replace(/[^0-9.-]+/g, ""))
-    }
+      return Number(String(string).replace(/[^0-9.-]+/g, ''));
+    };
 
-    const { value } = e.target
+    const { value } = e.target;
 
     const options = {
       maxiumumFractionDigits: 2,
       currency: 'USD',
       style: 'currency',
-      currencyDisplay: 'symbol'
-    }
+      currencyDisplay: 'symbol',
+    };
 
-    e.target.value = value ? localeStringToNumber(value).toLocaleString(undefined, options) : '';
-  }
+    e.target.value = value
+      ? localeStringToNumber(value).toLocaleString(undefined, options)
+      : '';
+  };
 
   const handleFocus = (e) => {
     e.target.select();
     console.log(e.target.value);
-  }
+  };
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <input type="date" name="date" onChange={handleInputChange} />
-        <label htmlFor="used">Used</label>
-        <input type="checkbox" name="used" checked={input.used} onChange={handleCheckboxChange} />
+        <label htmlFor="used">New Or Used</label>
+        <select name="used" onChange={handleDropdownChange}>
+          <option value=""></option>
+          <option value="new">New</option>
+          <option value="used">Used</option>
+        </select>
+        <label htmlFor="half">Full Or Half Deal</label>
+        <select name="half" onChange={handleDropdownChange}>
+          <option value=""></option>
+          <option value="full">Full</option>
+          <option value="half">Half</option>
+        </select>
         <label htmlFor="stockNumber">Stocknumber</label>
         <input
           type="number"
           name="stockNumber"
           id="stockNumber"
-          onChange={handleInputChange}
-        />
-        <label htmlFor="source">Source</label>
-        <input
-          type="text"
-          name="source"
-          id="source"
           onChange={handleInputChange}
         />
         <label htmlFor="warranty">Warranty</label>

@@ -9,8 +9,8 @@ const SaleModal = ({ showModal, handleModalDisplay }) => {
   const [input, setInput] = useState({
     date: null,
     used: false,
+    half: false,
     stockNumber: null,
-    source: '',
     warranty: false,
     finance: false,
     maintenance: false,
@@ -26,8 +26,8 @@ const SaleModal = ({ showModal, handleModalDisplay }) => {
     axios.post('http://localhost:5000/sale', {
       date: input.date,
       used: input.used,
+      half: input.half,
       stockNumber: input.stockNumber,
-      source: input.source,
       warranty: input.warranty,
       maintenance: input.maintenance,
       customer: input.customer,
@@ -67,9 +67,22 @@ const SaleModal = ({ showModal, handleModalDisplay }) => {
   const handleCheckboxChange = (e) => {
     setInput({ ...input, [e.target.name]: !!e.target.checked });
   };
+
+  const handleDropdownChange = (e) => {
+    let value;
+    if (e.target.value === 'new' || e.target.value === 'full') {
+      value = false;
+    } else {
+      value = true;
+    }
+    console.log(value);
+    setInput({ ...input, [e.target.name]: value });
+  };
+
   if (!showModal) {
     return <React.Fragment />;
   }
+
   return (
     <div
       className="sale-modal"
@@ -84,6 +97,7 @@ const SaleModal = ({ showModal, handleModalDisplay }) => {
         handleSubmit={handleSubmit}
         handleInputChange={handleInputChange}
         handleCheckboxChange={handleCheckboxChange}
+        handleDropdownChange={handleDropdownChange}
         input={input}
       />
     </div>
