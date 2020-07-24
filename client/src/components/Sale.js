@@ -3,7 +3,6 @@ import React from 'react';
 const Sale = ({
   date,
   stockNumber,
-  source,
   warranty,
   finance,
   maintenance,

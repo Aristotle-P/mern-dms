@@ -42,7 +42,6 @@ router.post('/sale', async (req, res) => {
     used,
     half,
     stockNumber,
-    source,
     warranty,
     maintenance,
     customer,
@@ -54,15 +53,14 @@ router.post('/sale', async (req, res) => {
 
   const date = new Date(req.body.date);
 
-  const formattedFrontGross = parseInt(frontGross.split(/[\$\.]+/).join(''));
-  const formattedBackGross = parseInt(backGross.split(/[\$\.]+/).join(''));
+  const formattedFrontGross = parseInt(frontGross.split(/[\$\.\,]+/).join(''));
+  const formattedBackGross = parseInt(backGross.split(/[\$\.\,]+/).join(''));
 
   const sale = new Sale({
     used,
     half,
     date,
     stockNumber,
-    source,
     warranty,
     maintenance,
     customer,

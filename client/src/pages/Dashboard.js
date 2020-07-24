@@ -84,7 +84,6 @@ const Dashboard = ({ handleModalDisplay, showModal }) => {
         new={sale.new}
         date={sale.date}
         stockNumber={sale.stockNumber}
-        source={sale.source}
         warranty={sale.warranty}
         finance={sale.finance}
         maintenance={sale.maintenance}
