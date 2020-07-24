@@ -57,18 +57,6 @@ const User = (props) => {
       <h1>
         {currentUser.name} | {currentUser.email}
       </h1>
-      <div className="sale-data-header">
-        <h3>New/Used</h3>
-        <h3>Date</h3>
-        <h3>Stock Number</h3>
-        <h3>Warranty</h3>
-        <h3>Finance</h3>
-        <h3>Maintenance</h3>
-        <h3>Customer</h3>
-        <h3>Vehicle</h3>
-        <h3>Front Gross</h3>
-        <h3>Back Gross</h3>
-      </div>
       <div>{salesMarkup}</div>
     </div>
   );

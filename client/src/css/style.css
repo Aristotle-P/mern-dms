@@ -52,3 +52,17 @@
 .modal-close {
   float: right;
 }
+
+.sale-form form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-container {
+  width: 100%;
+}
+
+.input-container * {
+  width: 100%;
+}
