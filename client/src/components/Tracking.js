@@ -5,6 +5,7 @@ const Tracking = ({
   usedSales,
   frontGross,
   backGross,
+  personalFrontGross,
   totalGross,
 }) => {
   const [volumeBonus, setVolumeBonus] = useState();
@@ -14,6 +15,8 @@ const Tracking = ({
   const [trackingFrontGross, setTrackingFrontGross] = useState();
   const [trackingBackGross, setTrackingBackGross] = useState();
   const [trackingTotalGross, setTrackingTotalGross] = useState();
+
+  console.log(personalFrontGross);
 
   useEffect(() => {
     const getDaysLeft = () => {
@@ -31,44 +34,45 @@ const Tracking = ({
 
     const getVolumeBonus = (volume) => {
       if (volume <= 5) {
-        const gross = backGross + frontGross;
-        const newGross = (20 / 100) * gross;
-        setVolumeBonus(newGross);
+        const newGross = (20 / 100) * frontGross;
+        setVolumeBonus(
+          Math.round((newGross / 100 + Number.EPSILON) * 100) / 100
+        );
       } else if (volume >= 6 && volume <= 10) {
-        const gross = backGross + frontGross;
-        const newGross = gross + (25 / 100) * gross;
-        console.log(gross, newGross);
-        setVolumeBonus(newGross);
+        const newGross = (25 / 100) * frontGross;
+        setVolumeBonus(
+          Math.round((newGross / 100 + Number.EPSILON) * 100) / 100
+        );
       } else if (volume === 10) {
-        const gross = backGross + frontGross;
-        const newGross = (30 / 100) * gross;
-        console.log(gross, newGross);
-        setVolumeBonus(newGross);
+        const newGross = (30 / 100) * frontGross;
+        setVolumeBonus(
+          Math.round((newGross / 100 + Number.EPSILON) * 100) / 100
+        );
       } else if (volume === 11) {
-        const gross = backGross + frontGross;
-        const newGross = (32 / 100) * gross;
-        console.log(gross, newGross);
-        setVolumeBonus(newGross);
+        const newGross = (32 / 100) * frontGross;
+        setVolumeBonus(
+          Math.round((newGross / 100 + Number.EPSILON) * 100) / 100
+        );
       } else if (volume === 12) {
-        const gross = backGross + frontGross;
-        const newGross = (34 / 100) * gross;
-        console.log(gross, newGross);
-        setVolumeBonus(newGross);
+        const newGross = (34 / 100) * frontGross;
+        setVolumeBonus(
+          Math.round((newGross / 100 + Number.EPSILON) * 100) / 100
+        );
       } else if (volume === 13) {
-        const gross = backGross + frontGross;
-        const newGross = (36 / 100) * gross;
-        console.log(gross, newGross);
-        setVolumeBonus(newGross);
+        const newGross = (36 / 100) * frontGross;
+        setVolumeBonus(
+          Math.round((newGross / 100 + Number.EPSILON) * 100) / 100
+        );
       } else if (volume === 14) {
-        const gross = backGross + frontGross;
-        const newGross = (38 / 100) * gross;
-        console.log(gross, newGross);
-        setVolumeBonus(newGross);
+        const newGross = (38 / 100) * frontGross;
+        setVolumeBonus(
+          Math.round((newGross / 100 + Number.EPSILON) * 100) / 100
+        );
       } else if (volume >= 15) {
-        const gross = backGross + frontGross;
-        const newGross = (40 / 100) * gross;
-        console.log(gross, newGross);
-        setVolumeBonus(newGross);
+        const newGross = (40 / 100) * frontGross;
+        setVolumeBonus(
+          Math.round((newGross / 100 + Number.EPSILON) * 100) / 100
+        );
       }
     };
 
@@ -95,37 +99,37 @@ const Tracking = ({
     };
 
     const getInternetTotalBonus = (gross) => {
-      if (gross >= 10000 && gross <= 14999) {
+      if (gross >= 1000000 && gross <= 1499999) {
         setInternetTotalBonus(400);
-      } else if (gross >= 15000 && gross <= 19999) {
+      } else if (gross >= 1500000 && gross <= 1999999) {
         setInternetTotalBonus(500);
-      } else if (gross >= 20000 && gross <= 24999) {
+      } else if (gross >= 2000000 && gross <= 2499999) {
         setInternetTotalBonus(600);
-      } else if (gross >= 25000 && gross <= 29999) {
+      } else if (gross >= 2500000 && gross <= 2999999) {
         setInternetTotalBonus(700);
-      } else if (gross >= 30000 && gross <= 34999) {
+      } else if (gross >= 3000000 && gross <= 3499999) {
         setInternetTotalBonus(1000);
-      } else if (gross >= 35000 && gross <= 39999) {
+      } else if (gross >= 3500000 && gross <= 3999999) {
         setInternetTotalBonus(1500);
-      } else if (gross >= 40000) {
+      } else if (gross >= 4000000) {
         setInternetTotalBonus(2000);
       }
     };
 
     const getFloorTotalBonus = (gross) => {
-      if (gross >= 20000 && gross <= 29999) {
+      if (gross >= 2000000 && gross <= 2999999) {
         setFloorTotalBonus(400);
-      } else if (gross >= 30000 && gross <= 39999) {
+      } else if (gross >= 3000000 && gross <= 3999999) {
         setFloorTotalBonus(500);
-      } else if (gross >= 40000 && gross <= 49999) {
+      } else if (gross >= 4000000 && gross <= 4999999) {
         setFloorTotalBonus(600);
-      } else if (gross >= 50000 && gross <= 59999) {
+      } else if (gross >= 5000000 && gross <= 5999999) {
         setFloorTotalBonus(700);
-      } else if (gross >= 60000 && gross <= 69999) {
+      } else if (gross >= 6000000 && gross <= 6999999) {
         setFloorTotalBonus(100);
-      } else if (gross >= 70000 && gross <= 79999) {
+      } else if (gross >= 7000000 && gross <= 7999999) {
         setFloorTotalBonus(1500);
-      } else if (gross >= 80000) {
+      } else if (gross >= 8000000) {
         setFloorTotalBonus(2000);
       }
     };
@@ -133,25 +137,31 @@ const Tracking = ({
     const getTrackingFrontGross = (frontGross) => {
       const days = getDaysLeft();
       const trackedGross = (frontGross / days.daysSold) * days.sellingDays;
-      setTrackingFrontGross(trackedGross);
+      setTrackingFrontGross(
+        Math.round((trackedGross / 100 + Number.EPSILON) * 100) / 100
+      );
     };
 
     const getTrackingBackGross = (backGross) => {
       const days = getDaysLeft();
       const trackedGross = (backGross / days.daysSold) * days.sellingDays;
-      setTrackingBackGross(trackedGross);
+      setTrackingBackGross(
+        Math.round((trackedGross / 100 + Number.EPSILON) * 100) / 100
+      );
     };
 
     const getTrackingTotalGross = (gross) => {
       const days = getDaysLeft();
       const trackedGross = (gross / days.daysSold) * days.sellingDays;
-      setTrackingTotalGross(trackedGross);
+      setTrackingTotalGross(
+        Math.round((trackedGross / 100 + Number.EPSILON) * 100) / 100
+      );
     };
 
     getVolumeBonus(newSales + usedSales);
-    getNewVehicleBonus(4);
-    getInternetTotalBonus(10000);
-    getFloorTotalBonus(20000);
+    getNewVehicleBonus(newSales);
+    getInternetTotalBonus(totalGross);
+    getFloorTotalBonus(totalGross);
     getTrackingFrontGross(frontGross);
     getTrackingBackGross(backGross);
     getTrackingTotalGross(totalGross);
@@ -160,6 +170,9 @@ const Tracking = ({
   return (
     <div className="tracking-container">
       <ul>
+        <li>Front Gross: {frontGross / 100}</li>
+        <li>Back Gross: {backGross / 100}</li>
+        <li>Total Gross: {totalGross / 100}</li>
         <li>Volume Bonus: {volumeBonus}</li>
         <li>New Vehicle Bonus: {newVehicleBonus}</li>
         <li>Internet Total Bonus: {internetTotalBonus}</li>
