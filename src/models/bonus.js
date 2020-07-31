@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
-const pdsSchema = new mongoose.Schema({
+const bonusSchema = new mongoose.Schema({
+  month: {
+    type: Number,
+    required: true
+  },
   showroomEntires: {
     type: Boolean,
     default: false,
@@ -29,8 +33,13 @@ const pdsSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  salesperson: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User',
+  },
 });
 
-const pds = mongoose.model('pds', pdsSchema);
+const Bonus = mongoose.model('Bonus', bonusSchema);
 
-module.exports = pds;
+module.exports = Bonus;

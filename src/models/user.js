@@ -46,8 +46,8 @@ userSchema.virtual('sales', {
   foreignField: 'salesperson',
 });
 
-userSchema.virtual('pds', {
-  ref: 'pds',
+userSchema.virtual('bonus', {
+  ref: 'Bonus',
   localField: '_id',
   foreignField: 'salesperson',
 });
