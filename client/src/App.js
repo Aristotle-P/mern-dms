@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import axios from 'axios';
 
 import { refreshToken } from './utils/handleToken';
 
@@ -18,6 +19,7 @@ const App = () => {
     name: '',
     id: null,
     accessToken: null,
+    currentBonus: null,
     admin: null,
   });
   const [loading, setLoading] = useState(true);
@@ -31,6 +33,10 @@ const App = () => {
     refreshToken(setUser);
     setLoading(false);
   }, []);
+
+  // useEffect(() => {
+
+  // }, [user.accessToken]);
 
   if (loading) {
     return <div>Loading...</div>;

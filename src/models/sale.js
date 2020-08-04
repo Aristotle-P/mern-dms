@@ -14,7 +14,7 @@ const saleSchema = new mongoose.Schema({
     required: true,
   },
   stockNumber: {
-    type: Number,
+    type: String,
     required: true,
   },
   warranty: {

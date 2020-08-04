@@ -6,13 +6,9 @@ import axios from 'axios';
 import { checkToken } from '../utils/handleToken';
 
 const Users = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [userStats, setUserStats] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    checkToken(user, setUser);
-  }, []);
 
   useEffect(() => {
     const getUserData = async () => {

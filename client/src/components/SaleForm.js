@@ -56,7 +56,7 @@ const SaleForm = ({
         <div className="input-container">
           <label htmlFor="stockNumber">Stocknumber</label>
           <input
-            type="number"
+            type="text"
             name="stockNumber"
             id="stockNumber"
             onChange={handleInputChange}
