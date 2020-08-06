@@ -2,12 +2,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 
 import SaleModal from '../components/SaleModal';
+import BonusModal from '../components/BonusModal';
 import Tracking from '../components/Tracking';
 import Sale from '../components/Sale';
 import UserContext from '../components/UserContext';
 
-const Dashboard = ({ handleModalDisplay, showModal }) => {
-  // const [showModal, setShowModal] = useState(false);
+const Dashboard = ({ handleSaleModalDisplay, showSaleModal, handleBonusModalDisplay, showBonusModal }) => {
   const { user } = useContext(UserContext);
   const [sales, setSales] = useState();
   const [frontGross, setFrontGross] = useState(0);
@@ -97,6 +97,15 @@ const Dashboard = ({ handleModalDisplay, showModal }) => {
     return <div>Loading...</div>;
   }
 
+  const { showroomEntries,
+    customerReviewScore,
+    googleReviews,
+    surveys,
+    financeDeals,
+    warranties,
+    maintenance,
+    insurance, } = user.currentBonus;
+
   const salesMarkup = sales.map((sale) => {
     return (
       <Sale
@@ -117,14 +126,28 @@ const Dashboard = ({ handleModalDisplay, showModal }) => {
 
   return (
     <div>
-      <button onClick={handleModalDisplay}>New Sale</button>
+      <button onClick={handleSaleModalDisplay}>New Sale</button>
+      <button onClick={handleBonusModalDisplay}>Edit PDS</button>
       <li>Total New Sales: {newSales}</li>
       <li>Total Used Sales: {usedSales}</li>
       {salesMarkup}
       <SaleModal
-        showModal={showModal}
-        handleModalDisplay={handleModalDisplay}
+        showModal={showSaleModal}
+        handleModalDisplay={handleSaleModalDisplay}
       />
+      <BonusModal showModal={showBonusModal} handleModalDisplay={handleBonusModalDisplay} />
+      <div>
+        <ul>
+          <li>Showroom Entries: {showroomEntries.toString()}</li>
+          <li>Customer Review Score: {customerReviewScore.toString()}</li>
+          <li>Surveys: {surveys.toString()}</li>
+          <li>Google Reviews: {googleReviews}</li>
+          <li>Finance Deals: {financeDeals}</li>
+          <li>Warranties: {warranties}</li>
+          <li>Maintenance: {maintenance}</li>
+          <li>Insurance: {insurance}</li>
+        </ul>
+      </div>
       <div>
         <Tracking
           newSales={newSales}

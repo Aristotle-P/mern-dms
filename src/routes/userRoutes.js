@@ -24,13 +24,13 @@ router.get('/user/:id', async (req, res) => {
 
 // Create user
 router.post('/user', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, onlineSales, password } = req.body;
   const foundUser = await User.findOne({ email });
   if (foundUser) {
     return res.send('Email already in use');
   }
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = new User({ name, email, password: hashedPassword });
+  const user = new User({ name, email, onlineSales, password: hashedPassword });
   await user.save();
   res.send(user);
 });

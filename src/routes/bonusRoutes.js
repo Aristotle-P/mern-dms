@@ -15,6 +15,7 @@ router.get('/bonuses/:id', async (req, res) => {
 router.post('/bonuses', async (req, res) => {
   const {
     showroomEntries,
+    customerReviewScore,
     googleReviews,
     surveys,
     financeDeals,
@@ -28,6 +29,7 @@ router.post('/bonuses', async (req, res) => {
   try {
     const bonus = new Bonus({
       showroomEntries,
+      customerReviewScore,
       googleReviews,
       surveys,
       financeDeals,
@@ -41,6 +43,26 @@ router.post('/bonuses', async (req, res) => {
     res.send(bonus);
   } catch (err) {
     res.status(500).send(err);
+  }
+})
+
+router.put('/bonuses/:id', async (req, res) => {
+  try {
+    const bonus = await Bonus.findOne({ _id: req.params.id });
+    if (!bonus) {
+      res.status(404).send('No bonus data found');
+    }
+
+    updates = Object.keys(req.body);
+
+    updates.forEach(data => {
+      bonus[data] = req.body[data]
+    })
+    console.log(bonus);
+    await bonus.save();
+    res.send(bonus);
+  } catch (err) {
+    console.log(err)
   }
 })
 

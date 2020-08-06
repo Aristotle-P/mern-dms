@@ -23,10 +23,15 @@ const App = () => {
     admin: null,
   });
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const [showSaleModal, setShowSaleModal] = useState(false);
+  const [showBonusModal, setShowBonusModal] = useState(false);
 
-  const handleModalDisplay = () => {
-    setShowModal(!showModal);
+  const handleSaleModalDisplay = () => {
+    setShowSaleModal(!showSaleModal);
+  };
+
+  const handleBonusModalDisplay = () => {
+    setShowBonusModal(!showBonusModal);
   };
 
   useEffect(() => {
@@ -48,8 +53,9 @@ const App = () => {
         <div
           className="App"
           onClick={() => {
-            if (showModal === true) {
-              setShowModal(false);
+            if (showSaleModal === true || showBonusModal === true) {
+              setShowSaleModal(false);
+              setShowBonusModal(false);
             }
           }}
         >
@@ -69,8 +75,10 @@ const App = () => {
               exact
               path="/"
               component={Dashboard}
-              handleModalDisplay={handleModalDisplay}
-              showModal={showModal}
+              handleSaleModalDisplay={handleSaleModalDisplay}
+              handleBonusModalDisplay={handleBonusModalDisplay}
+              showSaleModal={showSaleModal}
+              showBonusModal={showBonusModal}
             />
             <Route exact path="/login" component={Login} />
             <AdminRoute exact path="/users" component={Users} />
