@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema({
       }
     },
   },
+  onlineSales: {
+    type: Boolean,
+    required: true
+  },
   count: {
     type: Number,
     default: 0,

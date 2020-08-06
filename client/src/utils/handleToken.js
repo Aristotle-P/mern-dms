@@ -24,6 +24,7 @@ export const refreshToken = async (setUser) => {
             name: userRes.data.name,
             id: userRes.data._id,
             currentBonus: latestBonus,
+            onlineSales: userRes.data.onlineSales,
             admin: userRes.data.admin,
           });
         } else {
@@ -42,18 +43,19 @@ export const refreshToken = async (setUser) => {
             name: userRes.data.name,
             id: userRes.data._id,
             currentBonus: newRes.data,
+            onlineSales: userRes.data.onlineSales,
             admin: userRes.data.admin,
           });
         }
       } catch (err) {
         console.log(err);
       }
-      setUser({
-        accessToken: accessToken,
-        name: userRes.data.name,
-        id: userRes.data._id,
-        admin: userRes.data.admin,
-      });
+      // setUser({
+      //   accessToken: accessToken,
+      //   name: userRes.data.name,
+      //   id: userRes.data._id,
+      //   admin: userRes.data.admin,
+      // });
     } catch (err) {
       console.error(err);
     }

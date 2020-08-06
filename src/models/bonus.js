@@ -5,9 +5,13 @@ const bonusSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  showroomEntires: {
+  showroomEntries: {
     type: Boolean,
     default: false,
+  },
+  customerReviewScore: {
+    type: Boolean,
+    default: false
   },
   googleReviews: {
     type: Number,

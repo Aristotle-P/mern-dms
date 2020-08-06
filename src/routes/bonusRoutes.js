@@ -14,7 +14,7 @@ router.get('/bonuses/:id', async (req, res) => {
 
 router.post('/bonuses', async (req, res) => {
   const {
-    showroomEntires,
+    showroomEntries,
     googleReviews,
     surveys,
     financeDeals,
@@ -27,7 +27,7 @@ router.post('/bonuses', async (req, res) => {
 
   try {
     const bonus = new Bonus({
-      showroomEntires,
+      showroomEntries,
       googleReviews,
       surveys,
       financeDeals,

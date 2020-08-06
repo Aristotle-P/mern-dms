@@ -38,7 +38,7 @@ const Dashboard = ({ handleModalDisplay, showModal }) => {
     if (sales) {
       let tempNewSales = 0;
       sales.forEach((sale) => {
-        if (sale.new) {
+        if (!sale.used) {
           tempNewSales++;
         }
       });
@@ -46,7 +46,7 @@ const Dashboard = ({ handleModalDisplay, showModal }) => {
 
       let tempUsedSales = 0;
       sales.forEach((sale) => {
-        if (!sale.new) {
+        if (sale.used) {
           tempUsedSales++;
         }
       });
