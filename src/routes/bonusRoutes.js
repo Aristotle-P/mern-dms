@@ -58,7 +58,6 @@ router.put('/bonuses/:id', async (req, res) => {
     updates.forEach(data => {
       bonus[data] = req.body[data]
     })
-    console.log(bonus);
     await bonus.save();
     res.send(bonus);
   } catch (err) {

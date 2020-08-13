@@ -10,6 +10,7 @@ const User = require('./models/user');
 const userRoutes = require('./routes/userRoutes');
 const saleRoutes = require('./routes/saleRoutes');
 const bonusRoutes = require('./routes/bonusRoutes');
+const teamRoutes = require('./routes/teamRoutes');
 
 const app = express();
 
@@ -62,6 +63,7 @@ app.post('/refresh-token', async (req, res) => {
 app.use(userRoutes);
 app.use(saleRoutes);
 app.use(bonusRoutes);
+app.use(teamRoutes);
 
 const PORT = process.env.PORT || 5000;
 
