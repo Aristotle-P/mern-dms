@@ -66,3 +66,7 @@
 .input-container * {
   width: 100%;
 }
+
+.team-member {
+  margin-bottom: 15px;
+}

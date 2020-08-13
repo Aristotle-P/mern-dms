@@ -11,6 +11,7 @@ import Login from './pages/Login';
 import Users from './pages/Users';
 import Dashboard from './pages/Dashboard';
 import User from './pages/User';
+import Teams from './pages/Teams';
 
 import './App.css';
 
@@ -69,6 +70,9 @@ const App = () => {
             <button>
               <Link to="/users">Users</Link>
             </button>
+            <button>
+              <Link to="/teams">Teams</Link>
+            </button>
           </header>
           <Switch>
             <ProtectedRoute
@@ -83,6 +87,7 @@ const App = () => {
             <Route exact path="/login" component={Login} />
             <AdminRoute exact path="/users" component={Users} />
             <AdminRoute exact path="/user/:userId" component={User} />
+            <AdminRoute exact path="/teams" component={Teams} />
           </Switch>
         </div>
       </Router>
