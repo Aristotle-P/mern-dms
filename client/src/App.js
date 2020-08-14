@@ -26,6 +26,7 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [showSaleModal, setShowSaleModal] = useState(false);
   const [showBonusModal, setShowBonusModal] = useState(false);
+  const [showTeamModal, setShowTeamModal] = useState(false);
 
   const handleSaleModalDisplay = () => {
     setShowSaleModal(!showSaleModal);
@@ -34,6 +35,10 @@ const App = () => {
   const handleBonusModalDisplay = () => {
     setShowBonusModal(!showBonusModal);
   };
+
+  const handleTeamModalDisplay = () => {
+    setShowTeamModal(!showTeamModal);
+  }
 
   useEffect(() => {
     refreshToken(setUser);
@@ -87,7 +92,7 @@ const App = () => {
             <Route exact path="/login" component={Login} />
             <AdminRoute exact path="/users" component={Users} />
             <AdminRoute exact path="/user/:userId" component={User} />
-            <AdminRoute exact path="/teams" component={Teams} />
+            <AdminRoute exact path="/teams" component={Teams} handleTeamModalDisplay={handleTeamModalDisplay} showTeamModal={showTeamModal} />
           </Switch>
         </div>
       </Router>

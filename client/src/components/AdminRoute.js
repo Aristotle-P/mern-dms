@@ -7,7 +7,6 @@ const AdminRoute = ({ component: Component, ...rest }) => {
   const { user, setUser } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    console.log(user);
     if (user.accessToken !== null) {
       checkToken(user, setUser);
       // setLoading(false);

@@ -3,7 +3,7 @@ import Team from '../components/Team';
 
 import axios from 'axios';
 
-const Teams = () => {
+const Teams = ({ handleTeamModalDisplay, showTeamModal }) => {
   const [teams, setTeams] = useState();
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const Teams = () => {
   let markup;
   if (teams) {
     markup = teams.map((team) =>
-      <Team key={team._id} teamName={team.teamName} members={team.members} />
+      <Team key={team._id} teamName={team.teamName} teamId={team._id} members={team.members} handleTeamModalDisplay={handleTeamModalDisplay} showTeamModal={showTeamModal} />
     )
   }
   return (

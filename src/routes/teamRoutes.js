@@ -41,8 +41,10 @@ router.put('/team/:id', async (req, res) => {
       team[data] = req.body[data]
     })
     await team.save();
+    console.log(team);
     res.send(team);
   } catch (err) {
+    console.log(err);
     res.status(500).send(err);
   }
 })
