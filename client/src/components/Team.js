@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import axios from 'axios';
 
@@ -21,6 +21,10 @@ const Team = ({ teamName, teamId, members, updateTeams }) => {
     }
     updateTeams(newTeam);
   }
+
+  useEffect(() => {
+    setTeamMembers(members);
+  }, [members])
 
   return (
     <div className="team-container">

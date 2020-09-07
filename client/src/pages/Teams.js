@@ -34,6 +34,9 @@ const Teams = () => {
     }
     const selectedTeam = selectedTeamArray[0]
     const { data } = await axios.get(`http://localhost:5000/user/${input.memberName}`);
+    if (typeof data._id !== 'string') {
+      return closeModal();
+    }
     const newMember = {
       id: data._id,
       name: data.name,
@@ -41,15 +44,26 @@ const Teams = () => {
       onlineSales: data.onlineSales
     }
     const newTeams = JSON.parse(JSON.stringify(teams));
+    console.log(newTeams);
     newTeams.forEach(async team => {
       if (team.teamName === selectedTeam.teamName) {
+        team.members.push(newMember);
+        await axios.put(`http://localhost:5000/team/${selectedTeam._id}`, { members: team.members });
       }
-      team.members.push(newMember);
-      await axios.put(`http://localhost:5000/team/${selectedTeam._id}`, { members: team.members });
       return team;
     })
     setTeams(newTeams);
     closeModal();
+  }
+
+  let markup;
+  const createMarkup = () => {
+    if (teams) {
+      markup = teams.map((team) =>
+        <Team key={team._id} teamName={team.teamName} teamId={team._id} members={team.members} updateTeams={updateTeams} />
+      )
+    }
+    return markup;
   }
 
   useEffect(() => {
@@ -60,12 +74,9 @@ const Teams = () => {
     getTeams();
   }, []);
 
-  let markup;
-  if (teams) {
-    markup = teams.map((team) =>
-      <Team key={team._id} teamName={team.teamName} teamId={team._id} members={team.members} updateTeams={updateTeams} />
-    )
-  }
+  useEffect(() => {
+    createMarkup();
+  }, [teams]);
 
   return (
     <div>
@@ -84,7 +95,7 @@ const Teams = () => {
           </form>
         </div>
       </Modal>
-      {markup}
+      {createMarkup()}
     </div>
   )
 }
