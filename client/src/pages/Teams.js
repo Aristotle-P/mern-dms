@@ -20,8 +20,12 @@ const Teams = () => {
   }
 
   const updateTeams = (newTeam) => {
-    const updatedTeams = teams.filter(team => team.teamName !== newTeam.teamName);
-    updatedTeams.push(newTeam);
+    const updatedTeams = JSON.parse(JSON.stringify(teams));
+    updatedTeams.forEach(team => {
+      if (team.teamName === newTeam.teamName) {
+        team.members = newTeam.members;
+      }
+    })
     setTeams(updatedTeams);
   }
 

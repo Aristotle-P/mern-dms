@@ -15,10 +15,11 @@ const Team = ({ teamName, teamId, members, updateTeams }) => {
     })
     // setTeamMembers(newMembers);
     const newTeam = {
-      teamId,
+      _id: teamId,
       teamName,
-      members: [newMembers]
+      members: newMembers
     }
+    console.log(newTeam);
     updateTeams(newTeam);
   }
 
