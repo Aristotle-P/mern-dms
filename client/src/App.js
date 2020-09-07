@@ -13,8 +13,6 @@ import Dashboard from './pages/Dashboard';
 import User from './pages/User';
 import Teams from './pages/Teams';
 
-import './App.css';
-
 const App = () => {
   const [user, setUser] = useState({
     name: '',

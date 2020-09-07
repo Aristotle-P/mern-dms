@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import TeamModal from '../components/TeamModal';
+import React, { useState } from 'react'
 
 import axios from 'axios';
 
-const Team = ({ teamName, teamId, members, handleTeamModalDisplay, showTeamModal }) => {
+const Team = ({ teamName, teamId, members, updateTeams }) => {
   const [teamMembers, setTeamMembers] = useState(members);
-
-  useEffect(() => {
-    setTeamMembers(members);
-  }, []);
 
   const handleMemberClick = e => {
     e.preventDefault();
@@ -18,17 +13,18 @@ const Team = ({ teamName, teamId, members, handleTeamModalDisplay, showTeamModal
     axios.put(`http://localhost:5000/team/${teamId}`, {
       members: newMembers
     })
-    setTeamMembers(newMembers);
+    // setTeamMembers(newMembers);
+    const newTeam = {
+      teamId,
+      teamName,
+      members: [newMembers]
+    }
+    updateTeams(newTeam);
   }
 
-  const handleTeamClick = e => {
-    e.preventDefault();
-    handleTeamModalDisplay();
-  }
   return (
     <div className="team-container">
       <ul>
-        <button onClick={handleTeamClick} id={teamId}>Add Team Member</button>
         <li>{teamName}</li>
         {teamMembers.map(member =>
           <ul className="team-member" key={member.id}>
@@ -39,7 +35,6 @@ const Team = ({ teamName, teamId, members, handleTeamModalDisplay, showTeamModal
           </ul>
         )}
       </ul>
-      <TeamModal handleModalDisplay={handleTeamModalDisplay} showModal={showTeamModal} teamId={teamId} members={teamMembers} />
     </div>
   )
 }

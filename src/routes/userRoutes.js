@@ -18,9 +18,22 @@ router.get('/users', isAuth, async (req, res) => {
 // Get specific user
 router.get('/user/:id', async (req, res) => {
   const id = req.params.id;
-  const user = await User.findById({ _id: id });
-  res.send(user);
+  try {
+    const user = await User.findById({ _id: id });
+    res.send(user);
+  } catch (err) { }
+  try {
+    const user = await User.findOne({ name: id });
+    res.send(user);
+  } catch (err) { }
 });
+
+// Get specific user by name
+// router.get('/user/:name', async (req, res) => {
+//   const name = req.params.name;
+//   const user = await User.findOne({ name: name });
+//   res.send(user);
+// })
 
 // Create user
 router.post('/user', async (req, res) => {
