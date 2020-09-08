@@ -36,7 +36,7 @@ const App = () => {
 
   const handleTeamModalDisplay = () => {
     setShowTeamModal(!showTeamModal);
-  }
+  };
 
   useEffect(() => {
     refreshToken(setUser);
@@ -55,7 +55,7 @@ const App = () => {
     <UserContext.Provider value={{ user, setUser }}>
       <Router>
         <div
-          className="App"
+          className='App'
           onClick={() => {
             if (showSaleModal === true || showBonusModal === true) {
               setShowSaleModal(false);
@@ -65,32 +65,38 @@ const App = () => {
         >
           <header>
             <button>
-              <Link to="/">Home</Link>
+              <Link to='/'>Home</Link>
             </button>
             <button>
-              <Link to="/login">Login</Link>
+              <Link to='/login'>Login</Link>
             </button>
             <button>
-              <Link to="/users">Users</Link>
+              <Link to='/users'>Users</Link>
             </button>
             <button>
-              <Link to="/teams">Teams</Link>
+              <Link to='/teams'>Teams</Link>
             </button>
           </header>
           <Switch>
             <ProtectedRoute
               exact
-              path="/"
+              path='/'
               component={Dashboard}
               handleSaleModalDisplay={handleSaleModalDisplay}
               handleBonusModalDisplay={handleBonusModalDisplay}
               showSaleModal={showSaleModal}
               showBonusModal={showBonusModal}
             />
-            <Route exact path="/login" component={Login} />
-            <AdminRoute exact path="/users" component={Users} />
-            <AdminRoute exact path="/user/:userId" component={User} />
-            <AdminRoute exact path="/teams" component={Teams} handleTeamModalDisplay={handleTeamModalDisplay} showTeamModal={showTeamModal} />
+            <Route exact path='/login' component={Login} />
+            <AdminRoute exact path='/users' component={Users} />
+            <AdminRoute exact path='/user/:userId' component={User} />
+            <AdminRoute
+              exact
+              path='/teams'
+              component={Teams}
+              handleTeamModalDisplay={handleTeamModalDisplay}
+              showTeamModal={showTeamModal}
+            />
           </Switch>
         </div>
       </Router>
