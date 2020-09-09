@@ -116,7 +116,6 @@ const Teams = () => {
     const usersRes = await axios.get(
       `http://localhost:5000/user/regex/${input.memberName}`
     );
-    console.log(usersRes.data);
     setUserList(usersRes.data);
   };
 
@@ -132,7 +131,11 @@ const Teams = () => {
     let newTeamList;
     if (teamList) {
       newTeamList = teamList.map((team) => (
-        <TeamList updateInput={updateTeamInput} team={team} key={team._id} />
+        <TeamList
+          updateTeamInput={updateTeamInput}
+          team={team}
+          key={team._id}
+        />
       ));
     }
     return newTeamList;
@@ -142,7 +145,6 @@ const Teams = () => {
     const teamsRes = await axios.get(
       `http://localhost:5000/team/regex/${input.teamName}`
     );
-    console.log(teamsRes.data);
     setTeamList(teamsRes.data);
   };
 
@@ -186,10 +188,11 @@ const Teams = () => {
               name='name'
               id=''
               autoComplete='off'
-              // value={selectedUser}
-              onChange={(e) =>
-                setInput({ ...input, memberName: e.target.value })
-              }
+              value={selectedUser ? selectedUser : input.memberName}
+              onChange={(e) => {
+                setInput({ ...input, memberName: e.target.value });
+                setSelectedUser(null);
+              }}
             />
             <div className='member-list-dropdown'>
               {userList ? <ul>{createUserList()}</ul> : null}
@@ -200,7 +203,11 @@ const Teams = () => {
               name='team'
               id=''
               autoComplete='off'
-              onChange={(e) => setInput({ ...input, teamName: e.target.value })}
+              value={selectedTeam ? selectedTeam : input.teamName}
+              onChange={(e) => {
+                setInput({ ...input, teamName: e.target.value });
+                setSelectedTeam(null);
+              }}
             />
             <div className='team-list-dropdown'>
               {teamList ? <ul>{createTeamList()}</ul> : null}
