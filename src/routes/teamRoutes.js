@@ -13,12 +13,15 @@ router.get('/team', async (req, res) => {
 });
 
 router.get('/team/:id', async (req, res) => {
+  const id = req.params.id;
   try {
     const team = await Team.findOne({ _id: req.params.id });
     res.send(team);
-  } catch (err) {
-    res.status(404).send(err);
-  }
+  } catch (err) {}
+  try {
+    const team = await Team.findOne({ teamName: id });
+    res.send(team);
+  } catch (err) {}
 });
 
 router.post('/team', async (req, res) => {
