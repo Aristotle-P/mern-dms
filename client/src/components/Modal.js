@@ -9,6 +9,7 @@ const Modal = forwardRef((props, ref) => {
 
   const close = () => {
     props.setUserList(null);
+    props.setTeamList(null);
     setDisplay(false);
   };
 
