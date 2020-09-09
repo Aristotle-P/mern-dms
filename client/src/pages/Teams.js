@@ -1,14 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import Team from '../components/Team';
 import Modal from '../components/Modal';
 import Error from '../components/Error';
+import UserContext from '../components/UserContext';
+import MemberList from '../components/MemberList';
 
 import axios from 'axios';
 
 const Teams = () => {
+  const { user } = useContext(UserContext);
+  const [users, setUsers] = useState();
+  const [userList, setUserList] = useState();
   const [teams, setTeams] = useState();
   const [input, setInput] = useState({ memberName: '', teamName: '' });
   const [showError, setShowError] = useState(false);
+  const [loading, setLoading] = useState(true);
   const modalRef = useRef();
 
   const openModal = () => {
@@ -83,17 +89,54 @@ const Teams = () => {
     return markup;
   };
 
+  const createUserList = () => {
+    let newUserList;
+    if (userList) {
+      newUserList = userList.map((user) => (
+        <MemberList user={user.name} key={user.id} />
+      ));
+    }
+    return newUserList;
+  };
+
+  // const getUsers = async () => {
+  //   const usersRes = await axios.get('http://localhost:5000/users', {
+  //     headers: {
+  //       authorization: `bearer ${user.accessToken}`,
+  //     },
+  //     withCredentials: true,
+  //   });
+  //   setUsers(usersRes.data);
+  // };
+
+  const getUsersWithRegex = async () => {
+    const usersRes = await axios.get(
+      `http://localhost:5000/user/regex/${input.memberName}`
+    );
+    console.log(usersRes.data);
+    setUserList(usersRes.data);
+  };
+
   useEffect(() => {
     const getTeams = async () => {
       const res = await axios.get('http://localhost:5000/team');
       setTeams(res.data);
     };
     getTeams();
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    getUsersWithRegex();
+  }, [input]);
 
   useEffect(() => {
     createMarkup();
   }, [teams]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -113,6 +156,9 @@ const Teams = () => {
                 setInput({ ...input, memberName: e.target.value })
               }
             />
+            <div className='member-list-dropdown'>
+              <ul>{createUserList()}</ul>
+            </div>
             <label htmlFor='team'>Team Name</label>
             <input
               type='text'

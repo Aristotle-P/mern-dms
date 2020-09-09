@@ -21,19 +21,19 @@ router.get('/user/:id', async (req, res) => {
   try {
     const user = await User.findById({ _id: id });
     res.send(user);
-  } catch (err) { }
+  } catch (err) {}
   try {
     const user = await User.findOne({ name: id });
     res.send(user);
-  } catch (err) { }
+  } catch (err) {}
 });
 
-// Get specific user by name
-// router.get('/user/:name', async (req, res) => {
-//   const name = req.params.name;
-//   const user = await User.findOne({ name: name });
-//   res.send(user);
-// })
+// Get specific user by name with regex
+router.get('/user/regex/:name', async (req, res) => {
+  const name = req.params.name;
+  const user = await User.find({ name: { $regex: name, $options: 'i' } });
+  res.send(user);
+});
 
 // Create user
 router.post('/user', async (req, res) => {
