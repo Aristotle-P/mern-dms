@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-const MemberList = ({ user, key }) => {
+const MemberList = ({ user, updateInput }) => {
   if (user) {
-    return <li>{user}</li>;
+    return (
+      <li>
+        <button onClick={updateInput} value={user.name}>
+          {user.name}
+        </button>
+      </li>
+    );
   } else {
     return null;
   }

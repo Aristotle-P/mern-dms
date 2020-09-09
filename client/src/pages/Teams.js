@@ -9,8 +9,8 @@ import axios from 'axios';
 
 const Teams = () => {
   const { user } = useContext(UserContext);
-  const [users, setUsers] = useState();
   const [userList, setUserList] = useState();
+  const [selectedUser, setSelectedUser] = useState('');
   const [teams, setTeams] = useState();
   const [input, setInput] = useState({ memberName: '', teamName: '' });
   const [showError, setShowError] = useState(false);
@@ -70,6 +70,7 @@ const Teams = () => {
       return team;
     });
     setTeams(newTeams);
+    setUserList(null);
     closeModal();
   };
 
@@ -89,25 +90,23 @@ const Teams = () => {
     return markup;
   };
 
+  // Create member dropdown
+
+  const updateInput = (e) => {
+    e.preventDefault();
+    setInput({ ...input, memberName: e.target.value });
+    setSelectedUser(e.target.value);
+  };
+
   const createUserList = () => {
     let newUserList;
     if (userList) {
       newUserList = userList.map((user) => (
-        <MemberList user={user.name} key={user.id} />
+        <MemberList updateInput={updateInput} user={user} key={user._id} />
       ));
     }
     return newUserList;
   };
-
-  // const getUsers = async () => {
-  //   const usersRes = await axios.get('http://localhost:5000/users', {
-  //     headers: {
-  //       authorization: `bearer ${user.accessToken}`,
-  //     },
-  //     withCredentials: true,
-  //   });
-  //   setUsers(usersRes.data);
-  // };
 
   const getUsersWithRegex = async () => {
     const usersRes = await axios.get(
@@ -143,7 +142,7 @@ const Teams = () => {
       <h1>Teams</h1>
       {showError ? <Error error={'Team does not exist'} /> : null}
       <button onClick={openModal}>Add Member</button>
-      <Modal ref={modalRef}>
+      <Modal ref={modalRef} setUserList={setUserList}>
         <h1>Hello World</h1>
         <div>
           <form onSubmit={handleSubmit}>
@@ -152,21 +151,24 @@ const Teams = () => {
               type='text'
               name='name'
               id=''
+              autoComplete='off'
+              value={selectedUser}
               onChange={(e) =>
                 setInput({ ...input, memberName: e.target.value })
               }
-            />
+            ></input>
             <div className='member-list-dropdown'>
-              <ul>{createUserList()}</ul>
+              {userList ? <ul>{createUserList()}</ul> : null}
             </div>
             <label htmlFor='team'>Team Name</label>
             <input
               type='text'
               name='team'
               id=''
+              autoComplete='off'
               onChange={(e) => setInput({ ...input, teamName: e.target.value })}
             />
-            <input type='submit' value='Add Member' />
+            <input onClick={handleSubmit} type='submit' value='Add Member' />
           </form>
         </div>
       </Modal>
