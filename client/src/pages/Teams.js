@@ -1,14 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import Team from '../components/Team';
 import Modal from '../components/Modal';
 import Error from '../components/Error';
+import UserContext from '../components/UserContext';
+import MemberList from '../components/MemberList';
+import TeamList from '../components/TeamList';
 
 import axios from 'axios';
 
 const Teams = () => {
+  const { user } = useContext(UserContext);
+  const [userList, setUserList] = useState();
+  const [teamList, setTeamList] = useState();
+  const [selectedUser, setSelectedUser] = useState('');
+  const [selectedTeam, setSelectedTeam] = useState('');
   const [teams, setTeams] = useState();
   const [input, setInput] = useState({ memberName: '', teamName: '' });
   const [showError, setShowError] = useState(false);
+  const [loading, setLoading] = useState(true);
   const modalRef = useRef();
 
   const openModal = () => {
@@ -64,6 +73,8 @@ const Teams = () => {
       return team;
     });
     setTeams(newTeams);
+    setUserList(null);
+    setTeamList(null);
     closeModal();
   };
 
@@ -83,24 +94,89 @@ const Teams = () => {
     return markup;
   };
 
+  // Create member dropdown
+
+  const updateInput = (e) => {
+    e.preventDefault();
+    setInput({ ...input, memberName: e.target.value });
+    setSelectedUser(e.target.value);
+  };
+
+  const createUserList = () => {
+    let newUserList;
+    if (userList) {
+      newUserList = userList.map((user) => (
+        <MemberList updateInput={updateInput} user={user} key={user._id} />
+      ));
+    }
+    return newUserList;
+  };
+
+  const getUsersWithRegex = async () => {
+    const usersRes = await axios.get(
+      `http://localhost:5000/user/regex/${input.memberName}`
+    );
+    console.log(usersRes.data);
+    setUserList(usersRes.data);
+  };
+
+  // Create Team Dropdown
+
+  const updateTeamInput = (e) => {
+    e.preventDefault();
+    setInput({ ...input, teamName: e.target.value });
+    setSelectedTeam(e.target.value);
+  };
+
+  const createTeamList = () => {
+    let newTeamList;
+    if (teamList) {
+      newTeamList = teamList.map((team) => (
+        <TeamList updateInput={updateTeamInput} team={team} key={team._id} />
+      ));
+    }
+    return newTeamList;
+  };
+
+  const getTeamsWithRegex = async () => {
+    const teamsRes = await axios.get(
+      `http://localhost:5000/team/regex/${input.teamName}`
+    );
+    console.log(teamsRes.data);
+    setTeamList(teamsRes.data);
+  };
+
   useEffect(() => {
     const getTeams = async () => {
       const res = await axios.get('http://localhost:5000/team');
       setTeams(res.data);
     };
     getTeams();
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    getUsersWithRegex();
+  }, [input.memberName]);
+
+  useEffect(() => {
+    getTeamsWithRegex();
+  }, [input.teamName]);
 
   useEffect(() => {
     createMarkup();
   }, [teams]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
       <h1>Teams</h1>
       {showError ? <Error error={'Team does not exist'} /> : null}
       <button onClick={openModal}>Add Member</button>
-      <Modal ref={modalRef}>
+      <Modal ref={modalRef} setUserList={setUserList} setTeamList={setTeamList}>
         <h1>Hello World</h1>
         <div>
           <form onSubmit={handleSubmit}>
@@ -109,18 +185,27 @@ const Teams = () => {
               type='text'
               name='name'
               id=''
+              autoComplete='off'
+              // value={selectedUser}
               onChange={(e) =>
                 setInput({ ...input, memberName: e.target.value })
               }
             />
+            <div className='member-list-dropdown'>
+              {userList ? <ul>{createUserList()}</ul> : null}
+            </div>
             <label htmlFor='team'>Team Name</label>
             <input
               type='text'
               name='team'
               id=''
+              autoComplete='off'
               onChange={(e) => setInput({ ...input, teamName: e.target.value })}
             />
-            <input type='submit' value='Add Member' />
+            <div className='team-list-dropdown'>
+              {teamList ? <ul>{createTeamList()}</ul> : null}
+            </div>
+            <input onClick={handleSubmit} type='submit' value='Add Member' />
           </form>
         </div>
       </Modal>
