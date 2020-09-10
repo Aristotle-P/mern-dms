@@ -16,11 +16,15 @@ const Teams = () => {
   const [selectedTeam, setSelectedTeam] = useState('');
   const [teams, setTeams] = useState();
   const [input, setInput] = useState({ memberName: '', teamName: '' });
+  const [errorMessage, setErrorMessage] = useState('');
   const [showError, setShowError] = useState(false);
   const [loading, setLoading] = useState(true);
   const modalRef = useRef();
 
   const openModal = () => {
+    setSelectedUser('');
+    setSelectedTeam('');
+    setInput({ memberName: '', teamName: '' });
     modalRef.current.openModal();
   };
 
@@ -40,6 +44,24 @@ const Teams = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Check if person exists in a team
+    let duplicate = false;
+    teams.forEach((team) => {
+      team.members.forEach((member) => {
+        if (member.name === input.memberName) {
+          duplicate = true;
+        }
+      });
+    });
+
+    if (duplicate === true) {
+      setErrorMessage('Member already exists in a team');
+      setShowError(true);
+      setUserList(null);
+      setTeamList(null);
+      return closeModal();
+    }
+
     const selectedTeamArray = teams.filter(
       (team) => team.teamName === input.teamName
     );
@@ -78,8 +100,8 @@ const Teams = () => {
     closeModal();
   };
 
-  let markup;
   const createMarkup = () => {
+    let markup;
     if (teams) {
       markup = teams.map((team) => (
         <Team
@@ -176,7 +198,7 @@ const Teams = () => {
   return (
     <div>
       <h1>Teams</h1>
-      {showError ? <Error error={'Team does not exist'} /> : null}
+      {showError ? <Error error={errorMessage} /> : null}
       <button onClick={openModal}>Add Member</button>
       <Modal ref={modalRef} setUserList={setUserList} setTeamList={setTeamList}>
         <h1>Hello World</h1>
