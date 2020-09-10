@@ -173,7 +173,10 @@ const Dashboard = () => {
       </Modal>
       <Modal ref={bonusModalRef}>
         <BonusModal
-          closeModal={closeModal} modal={bonusModalRef} setBonus={setBonus}
+          closeModal={closeModal}
+          modal={bonusModalRef}
+          bonus={bonus}
+          setBonus={setBonus}
         />
       </Modal>
       <div>
