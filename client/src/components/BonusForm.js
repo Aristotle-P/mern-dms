@@ -3,8 +3,7 @@ import React from 'react';
 const BonusForm = ({
   handleSubmit,
   handleInputChange,
-  handleDropdownChange,
-  input,
+  handleDropdownChange
 }) => {
   return (
     <div className="sale-form">

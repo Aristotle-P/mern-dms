@@ -4,7 +4,7 @@ import axios from 'axios';
 import UserContext from './UserContext';
 import BonusForm from './BonusForm';
 
-const BonusModal = ({ showModal, handleModalDisplay }) => {
+const BonusModal = ({ closeModal, modal, setBonus }) => {
   const { user } = useContext(UserContext);
   const [input, setInput] = useState({
     showroomEntries: null,
@@ -27,7 +27,8 @@ const BonusModal = ({ showModal, handleModalDisplay }) => {
       }
     }
     axios.put(`http://localhost:5000/bonuses/${user.currentBonus._id}`, updates);
-    handleModalDisplay();
+    setBonus(updates)
+    closeModal(modal);
   };
 
   const handleInputChange = (e) => {
@@ -48,28 +49,16 @@ const BonusModal = ({ showModal, handleModalDisplay }) => {
     setInput({ ...input, [e.target.name]: value });
   };
 
-  if (!showModal) {
-    return <React.Fragment />;
-  }
-
   return (
-    <div
-      className="sale-modal"
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
-    >
-      <button className="modal-close" onClick={handleModalDisplay}>
-        X
-      </button>
+    <div>
+      <button className="modal-close" onClick={() => { closeModal(modal) }}>X</button>
       <BonusForm
         handleSubmit={handleSubmit}
         handleInputChange={handleInputChange}
         handleCheckboxChange={handleCheckboxChange}
         handleDropdownChange={handleDropdownChange}
-        input={input}
       />
-    </div>
+    </div >
   );
 };
 

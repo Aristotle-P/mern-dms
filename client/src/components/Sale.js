@@ -2,6 +2,7 @@ import React from 'react';
 
 const Sale = ({
   date,
+  used,
   stockNumber,
   warranty,
   finance,
@@ -34,6 +35,7 @@ const Sale = ({
   return (
     <div className="sale-data-container">
       <div>Date: {date}</div>
+      <div>Used: {used.toString()}</div>
       <div>Stocknumber: {stockNumber}</div>
       <div>Warranty: {warranty}</div>
       <div>Finance: {finance}</div>

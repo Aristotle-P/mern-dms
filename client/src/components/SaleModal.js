@@ -4,7 +4,7 @@ import axios from 'axios';
 import UserContext from './UserContext';
 import SaleForm from './SaleForm';
 
-const SaleModal = ({ showModal, handleModalDisplay }) => {
+const SaleModal = ({ closeModal, modal, setToUpdate }) => {
   const { user } = useContext(UserContext);
   const [input, setInput] = useState({
     date: null,
@@ -23,7 +23,7 @@ const SaleModal = ({ showModal, handleModalDisplay }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.target.reset();
-    axios.post('http://localhost:5000/sale', {
+    await axios.post('http://localhost:5000/sale', {
       date: input.date,
       used: input.used,
       half: input.half,
@@ -36,7 +36,8 @@ const SaleModal = ({ showModal, handleModalDisplay }) => {
       backGross: input.backGross,
       salesperson: user.id,
     });
-    handleModalDisplay();
+    setToUpdate(true);
+    closeModal(modal);
   };
 
   const handleInputChange = (e) => {
@@ -79,20 +80,9 @@ const SaleModal = ({ showModal, handleModalDisplay }) => {
     setInput({ ...input, [e.target.name]: value });
   };
 
-  if (!showModal) {
-    return <React.Fragment />;
-  }
-
   return (
-    <div
-      className="sale-modal"
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
-    >
-      <button className="modal-close" onClick={handleModalDisplay}>
-        X
-      </button>
+    <div>
+      <button className="modal-close" onClick={() => { closeModal(modal) }}>X</button>
       <SaleForm
         handleSubmit={handleSubmit}
         handleInputChange={handleInputChange}

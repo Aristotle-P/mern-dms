@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import axios from 'axios';
 
 import { refreshToken } from './utils/handleToken';
 
@@ -22,21 +21,6 @@ const App = () => {
     admin: null,
   });
   const [loading, setLoading] = useState(true);
-  const [showSaleModal, setShowSaleModal] = useState(false);
-  const [showBonusModal, setShowBonusModal] = useState(false);
-  const [showTeamModal, setShowTeamModal] = useState(false);
-
-  const handleSaleModalDisplay = () => {
-    setShowSaleModal(!showSaleModal);
-  };
-
-  const handleBonusModalDisplay = () => {
-    setShowBonusModal(!showBonusModal);
-  };
-
-  const handleTeamModalDisplay = () => {
-    setShowTeamModal(!showTeamModal);
-  };
 
   useEffect(() => {
     refreshToken(setUser);
@@ -54,15 +38,7 @@ const App = () => {
   return (
     <UserContext.Provider value={{ user, setUser }}>
       <Router>
-        <div
-          className='App'
-          onClick={() => {
-            if (showSaleModal === true || showBonusModal === true) {
-              setShowSaleModal(false);
-              setShowBonusModal(false);
-            }
-          }}
-        >
+        <div className='App'>
           <header>
             <button>
               <Link to='/'>Home</Link>
@@ -82,10 +58,6 @@ const App = () => {
               exact
               path='/'
               component={Dashboard}
-              handleSaleModalDisplay={handleSaleModalDisplay}
-              handleBonusModalDisplay={handleBonusModalDisplay}
-              showSaleModal={showSaleModal}
-              showBonusModal={showBonusModal}
             />
             <Route exact path='/login' component={Login} />
             <AdminRoute exact path='/users' component={Users} />
@@ -94,8 +66,6 @@ const App = () => {
               exact
               path='/teams'
               component={Teams}
-              handleTeamModalDisplay={handleTeamModalDisplay}
-              showTeamModal={showTeamModal}
             />
           </Switch>
         </div>
