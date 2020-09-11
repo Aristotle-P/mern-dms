@@ -17,7 +17,8 @@ const Dashboard = () => {
   const [personalFrontGross, setPersonalFrontGross] = useState(0);
   const [totalGross, setTotalGross] = useState(0);
   const [newSales, setNewSales] = useState(0);
-  // Set into SaleModal when creating a sale, causes useEffect to fetch sales again
+
+  // Set in SaleModal when creating a sale, causes useEffect to fetch sales again
   const [toUpdate, setToUpdate] = useState(false);
   const [usedSales, setUsedSales] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -38,18 +39,14 @@ const Dashboard = () => {
       const res = await axios.get(`http://localhost:5000/sales/${user.id}`);
       try {
         if (res.data) {
-          console.log('setting sales');
           setSales(res.data);
-          console.log('sales set');
           setLoading(false);
         }
       } catch (err) {
         console.error(err);
       }
     };
-    console.log('getting sales');
     getSales();
-    console.log('finished getting sales');
   }, [toUpdate]);
 
   useEffect(() => {

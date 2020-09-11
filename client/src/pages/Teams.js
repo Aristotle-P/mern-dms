@@ -84,7 +84,6 @@ const Teams = () => {
     };
 
     const newTeams = JSON.parse(JSON.stringify(teams));
-    console.log(newTeams);
     newTeams.forEach(async (team) => {
       if (team.teamName === selectedTeam.teamName) {
         team.members.push(newMember);
